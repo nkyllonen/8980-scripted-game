@@ -71,11 +71,20 @@ animatedModels[id] = true
 rotYVelModel[id] = 1
 id = addModel("FloorPart",0,0,0)
 placeModel(id,0,-.02,0)
-scaleModel(id,3,1,3)
+scaleModel(id,10,1,10)
 setModelMaterial(id,"Gold")
-dino = addModel("Dino",0,0,-.15)  --VeryFancyCube
+-- dino = addModel("Dino",0,0,-.15)  --VeryFancyCube
 --placeModel(dino,-1.5,1.5,0.5)
 --scaleModel(dino,.5,0.5,1.5)
 --animatedModels[dino] = true
 --rotZVelModel[dino] = 1
-tree = addModel("Tree", 0, 0, -0.15)
+-- tree = addModel("Tree", 0, 0, -0.15)
+
+trees = {}
+idx = 1
+for i = -10, 10 do
+  for j = -10, 10 do
+    trees[idx] = addModel("Tree", i, 0, j)
+    idx = idx + 1
+  end
+end
