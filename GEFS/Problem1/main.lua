@@ -21,6 +21,8 @@ velModel = {}
 rotYVelModel = {}
 
 function frameUpdate(dt)
+  frameDt = dt
+
   for modelID,v in pairs(animatedModels) do
     --print("ID",modelID)
     local vel = velModel[modelID]
@@ -36,19 +38,30 @@ function frameUpdate(dt)
   end
 end
 
+theta = 0
 function keyHandler(keys)
+  -- rotate camera to the left
   if keys.left then
-    translateModel(dino,0,0,-0.1)
+    theta = theta + 1*frameDt
   end
+  -- rotate camera to the right
   if keys.right then
-    translateModel(dino,0,0,0.1)
+    theta = theta - 1*frameDt
   end
+  -- move camera forward
   if keys.up then
-    translateModel(dino,0.1,0,0)
+    CameraPosX = CameraPosX + CameraDirX*frameDt
+    CameraPosZ = CameraPosZ + CameraDirZ*frameDt
   end
+  -- move camera backward
   if keys.down then
-    translateModel(dino,-0.1,0,0)
+    CameraPosX = CameraPosX - CameraDirX*frameDt
+    CameraPosZ = CameraPosZ - CameraDirZ*frameDt
   end
+
+  -- apply theta changes
+  CameraDirX = math.cos(theta)
+  CameraDirZ = -math.sin(theta)
 end
 
 id = addModel("Teapot",0,0,0)
@@ -65,5 +78,4 @@ dino = addModel("Dino",0,0,-.15)  --VeryFancyCube
 --scaleModel(dino,.5,0.5,1.5)
 --animatedModels[dino] = true
 --rotZVelModel[dino] = 1
--- tree = addModel("Tree", 0, 0, -0.15)
-deer = addModel("Deer", 0, 0, -0.15)
+tree = addModel("Tree", 0, 0, -0.15)
