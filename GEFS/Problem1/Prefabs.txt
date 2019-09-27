@@ -70,7 +70,3 @@ objModel = Trex.obj #Triceratops
 [Tree]
 scale 100
 objModel = /LowPoly_Trees/Oak_Tree.mtl
-
-[Deer]
-scale 10
-objModel = deer.obj
