@@ -64,27 +64,25 @@ function keyHandler(keys)
   CameraDirZ = -math.sin(theta)
 end
 
+-- teapot
 id = addModel("Teapot",0,0,0)
 setModelMaterial(id,"Shiny Red Plastic")
---setModelMaterial(id,"Steel")
 animatedModels[id] = true
 rotYVelModel[id] = 1
+
+-- floor
 id = addModel("FloorPart",0,0,0)
 placeModel(id,0,-.02,0)
 scaleModel(id,10,1,10)
 setModelMaterial(id,"Gold")
--- dino = addModel("Dino",0,0,-.15)  --VeryFancyCube
---placeModel(dino,-1.5,1.5,0.5)
---scaleModel(dino,.5,0.5,1.5)
---animatedModels[dino] = true
---rotZVelModel[dino] = 1
--- tree = addModel("Tree", 0, 0, -0.15)
 
-trees = {}
-idx = 1
-for i = -10, 10 do
-  for j = -10, 10 do
-    trees[idx] = addModel("Tree", i, 0, j)
-    idx = idx + 1
-  end
-end
+-- forest
+-- trees = {}
+-- idx = 1
+-- for i = -10, 10 do
+--   for j = -10, 10 do
+--     trees[idx] = addModel("Tree", i, 0, j)
+--     idx = idx + 1
+--   end
+-- end
+tree = addModel("Tree", 2, 0, -0.1)
