@@ -17,6 +17,8 @@ bool drawColliders = false;
 
 int targetFrameRate = 30;
 float secondsPerFrame = 1.0f / (float)targetFrameRate;
+float nearPlane = 0.5;
+float farPlane = 10;
 
 #include "luaSupport.h"
 
@@ -292,7 +294,7 @@ int main(int argc, char *argv[]){
 		// drawSceneGeometry(curScene.toDraw); //Pass 2A: Draw Scene Geometry
 
 		// depth culling
-		drawSceneGeometry(curScene.toDraw, camDir, camPos);
+		drawSceneGeometry(curScene.toDraw, camDir, camPos, nearPlane, farPlane);
 
 		//TODO: Add a pass which draws some items without depth culling (e.g. keys, items)
 		if (drawColliders) drawColliderGeometry(); //Pass 2B: Draw Colliders
@@ -365,7 +367,7 @@ void configEngine(string configFile, string configName){
   char rawline[1024]; //Assumes no line is longer than 1024 characters!
 
   // open the file containing the scene description
-  fp = fopen(configFile.c_str(), "r");
+  fp = fopen(configFile.c_str(), "rb");
 
 	LOG_F(INFO,"Loading Config File: %s", configFile.c_str());
 	CHECK_NOTNULL_F(fp,"Can't open configuration file '%s'", configFile.c_str());
@@ -462,6 +464,18 @@ void configEngine(string configFile, string configName){
 			numBloomPasses = val;
       LOG_F(1,"Number of bloom passes: %d", numBloomPasses);
     }
+		if (commandStr == "nearPlane") {
+			float val;
+			sscanf(rawline, "nearPlane = %f", &val);
+			nearPlane = val;
+			LOG_F(1, "Near plane set to: %f", nearPlane);
+		}
+		if (commandStr == "farPlane") {
+			float val;
+			sscanf(rawline, "farPlane = %f", &val);
+			farPlane = val;
+			LOG_F(1, "Far plane set to: %f", farPlane);
+		}
 	}
 }
 

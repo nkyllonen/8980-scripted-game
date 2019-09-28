@@ -408,7 +408,7 @@ void drawSceneGeometry(vector<Model*> toDraw){
 }
 
 // depth culling
-void drawSceneGeometry(vector<Model*> toDraw, glm::vec3 forward, glm::vec3 camPos){
+void drawSceneGeometry(vector<Model*> toDraw, glm::vec3 forward, glm::vec3 camPos, float nearPlane, float farPlane){
 	glBindVertexArray(modelsVAO);
 
 	float radius = 1;
@@ -421,12 +421,11 @@ void drawSceneGeometry(vector<Model*> toDraw, glm::vec3 forward, glm::vec3 camPo
 		// world position = rightmost column of transform
 		glm::vec4 pos4 = models[toDraw[i]->ID].transform*glm::vec4(0,0,0,1);
 
+		// projection along forward
 		float d = glm::dot(glm::vec3(pos4)-camPos,forward);
 
-		// don't render
-		if (d < radius) continue;
-
-		drawGeometry(*toDraw[i], -1, I);
+		// render if between near and far planes
+		if (d + radius > nearPlane && d - radius < farPlane) drawGeometry(*toDraw[i], -1, I);
 	}
 }
 
