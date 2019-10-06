@@ -68,5 +68,5 @@ scale .1
 objModel = Trex.obj #Triceratops
 
 [Tree]
-scale 0.5
+scale 0.1
 objModel = Oak_Tree.obj

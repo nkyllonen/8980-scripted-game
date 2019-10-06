@@ -77,12 +77,11 @@ scaleModel(id,10,1,10)
 setModelMaterial(id,"Gold")
 
 -- forest
--- trees = {}
--- idx = 1
--- for i = -10, 10 do
---   for j = -10, 10 do
---     trees[idx] = addModel("Tree", i, 0, j)
---     idx = idx + 1
---   end
--- end
-tree = addModel("Tree", 2, 0, -0.1)
+trees = {}
+idx = 1
+for i = -10, 10 do
+  for j = -10, 10 do
+    trees[idx] = addModel("Tree", i, 0, j)
+    idx = idx + 1
+  end
+end

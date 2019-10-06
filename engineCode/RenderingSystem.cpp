@@ -407,6 +407,28 @@ void drawSceneGeometry(vector<Model*> toDraw){
 	}
 }
 
+// depth culling
+void drawSceneGeometry(vector<Model*> toDraw, glm::vec3 forward, glm::vec3 camPos, float nearPlane, float farPlane){
+	glBindVertexArray(modelsVAO);
+
+	float radius = 1;
+
+	glm::mat4 I;
+	totalTriangles = 0;
+	for (size_t i = 0; i < toDraw.size(); i++){
+		//printf("%s - %d\n",toDraw[i]->name.c_str(),i);
+		
+		// world position = rightmost column of transform
+		glm::vec4 pos4 = models[toDraw[i]->ID].transform*glm::vec4(0,0,0,1);
+
+		// projection along forward
+		float d = glm::dot(glm::vec3(pos4)-camPos,forward);
+
+		// render if between near and far planes
+		if (d + radius > nearPlane && d - radius < farPlane) drawGeometry(*toDraw[i], -1, I);
+	}
+}
+
 //-------------  Final Composite --------------
 
 Shader compositeShader;
