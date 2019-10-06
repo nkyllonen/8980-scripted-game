@@ -253,6 +253,12 @@ int main(int argc, char *argv[]) {
 		camUp = getCameraUpFromLua(L);
 		lookatPoint = camPos + camDir;
 
+		if (useDebugCamera) {
+			debugCamUp = camUp;
+			debugCamDir = glm::normalize(camPos - debugCamPos); // look at the rendering camera
+			debugLookatPoint = debugCamPos + debugCamDir;
+		}
+
 		//LOG_F(3,"Read Camera from Lua");
 
 		//TODO: Allow Lua script to set Lights dynamically (it's currently static)
@@ -297,6 +303,11 @@ int main(int argc, char *argv[]) {
 		mat4 view = glm::lookAt(camPos,																	//Camera Position
 								lookatPoint,															//Point to look at (camPos + camDir)
 								camUp);																	//Camera Up direction
+		
+		if (useDebugCamera) {
+			view = glm::lookAt(debugCamPos, debugLookatPoint, debugCamUp);
+		}
+
 		mat4 proj = glm::perspective(FOV * 3.14f / 180, screenWidth / (float)screenHeight, .2f, 20.0f); //FOV, aspect, near, far
 		//view = lightViewMatrix; proj = lightProjectionMatrix;  //This was useful to visualize the shadowmap
 
