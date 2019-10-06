@@ -9,6 +9,7 @@
 #include "Shader.h"
 #include <external/loguru.hpp>
 #include <external/stb_image.h>
+#include <cmath>
 
 
 using std::vector;
@@ -408,7 +409,7 @@ void drawSceneGeometry(vector<Model*> toDraw){
 }
 
 // depth culling
-void drawSceneGeometry(vector<Model*> toDraw, glm::vec3 forward, glm::vec3 camPos, float nearPlane, float farPlane){
+void drawSceneGeometry(vector<Model*> toDraw, glm::vec3 forward, glm::vec3 camPos, float nearPlane, float farPlane, float aspectRatio, float fov){
 	glBindVertexArray(modelsVAO);
 
 	float radius = 1;
@@ -424,8 +425,46 @@ void drawSceneGeometry(vector<Model*> toDraw, glm::vec3 forward, glm::vec3 camPo
 		// projection along forward
 		float d = glm::dot(glm::vec3(pos4)-camPos,forward);
 
+		//TODO compute the six planes for depth culling here
+		//TODO remove this later
+		//aspectRatio = aspectRatio / 2;
+		
+		//Step 1: compute near points
+		float yNear = nearPlane * tan(fov / 2);
+		float xNear = yNear * aspectRatio;
+		glm::vec3 nearTopLeft = glm::vec3(-xNear,yNear, nearPlane);
+		glm::vec3 nearTopRight = glm::vec3(xNear,yNear, nearPlane);
+		glm::vec3 nearBottomLeft = glm::vec3(-xNear,-yNear, nearPlane);
+		glm::vec3 nearBottomRight = glm::vec3(xNear,-yNear, nearPlane);
+
+
+		//Step 2: compute far points
+		float yFar = farPlane * tan(fov / 2);
+		float xFar = yFar * aspectRatio;
+		glm::vec3 farTopLeft = glm::vec3(-xFar,yFar, farPlane);
+		glm::vec3 farTopRight = glm::vec3(xFar,yFar, farPlane);
+		glm::vec3 farBottomLeft = glm::vec3(-xFar,-yFar, farPlane);
+		glm::vec3 farBottomRight = glm::vec3(xFar,-yFar, farPlane);
+
+
+
+		//Step 3: compute the normal vectors for all six planes
+		glm::vec3 left = glm::cross((nearTopLeft - nearBottomLeft),(farBottomLeft - nearBottomLeft));
+		
+		glm::vec3 right = glm::cross((nearTopRight - nearBottomRight), (farBottomRight - nearBottomRight));
+		//glm::vec3 top = glm::cross((nearTopRight - nearBottomRight), (farBottomRight - nearBottomRight));
+		//glm::vec3 bottom = 
+		//glm::vec3 far = 
+		//glm::vec3 near = 
+
+		//Step 4: Compute dot product of object with normal vector above
+		float leftVal = glm::dot(left,glm::vec3(pos4)-camPos);
+
+		//Step 5: Test if resulting dot proucts are positive
+		bool leftBool = leftVal > 0;
+
 		// render if between near and far planes
-		if (d + radius > nearPlane && d - radius < farPlane) drawGeometry(*toDraw[i], -1, I);
+		if (d + radius > nearPlane && d - radius < farPlane && leftBool) drawGeometry(*toDraw[i], -1, I);
 	}
 }
 

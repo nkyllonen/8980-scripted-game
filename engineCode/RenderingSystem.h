@@ -13,7 +13,7 @@ extern bool xxx; //
 void initPBRShading();
 void setPBRShaderUniforms(glm::mat4 view, glm::mat4 proj, glm::mat4 lightViewMatrix, glm::mat4 lightProjectionMatrix, bool useShadowMap);
 void drawSceneGeometry(std::vector<Model*> toDraw);
-void drawSceneGeometry(std::vector<Model*> toDraw, glm::vec3 forward, glm::vec3 camPos, float nearPlane, float farPlane);
+void drawSceneGeometry(std::vector<Model*> toDraw, glm::vec3 forward, glm::vec3 camPos, float nearPlane, float farPlane, float aspectRatio, float fov);
 
 //HDR render targets
 void initHDRBuffers();

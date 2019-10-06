@@ -19,6 +19,10 @@ int targetFrameRate = 30;
 float secondsPerFrame = 1.0f / (float)targetFrameRate;
 float nearPlane = 0.5;
 float farPlane = 10;
+float leftPlane = 1;
+float rightPlane = 1;
+float topPlane = 5;
+float bottomPlane = 0;
 
 #include "luaSupport.h"
 
@@ -294,7 +298,7 @@ int main(int argc, char *argv[]){
 		// drawSceneGeometry(curScene.toDraw); //Pass 2A: Draw Scene Geometry
 
 		// depth culling
-		drawSceneGeometry(curScene.toDraw, camDir, camPos, nearPlane, farPlane);
+		drawSceneGeometry(curScene.toDraw, camDir, camPos, nearPlane, farPlane, screenWidth / (float) screenHeight, FOV);
 
 		//TODO: Add a pass which draws some items without depth culling (e.g. keys, items)
 		if (drawColliders) drawColliderGeometry(); //Pass 2B: Draw Colliders

@@ -48,10 +48,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/nkyllonen/Documents/csci8980-graphics/8980-large-scenes
+CMAKE_SOURCE_DIR = /home/moell162/Documents/GameEngine/8980-large-scenes
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/nkyllonen/Documents/csci8980-graphics/8980-large-scenes/build
+CMAKE_BINARY_DIR = /home/moell162/Documents/GameEngine/8980-large-scenes/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -80,9 +80,9 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/nkyllonen/Documents/csci8980-graphics/8980-large-scenes/build/CMakeFiles /home/nkyllonen/Documents/csci8980-graphics/8980-large-scenes/build/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/moell162/Documents/GameEngine/8980-large-scenes/build/CMakeFiles /home/moell162/Documents/GameEngine/8980-large-scenes/build/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/nkyllonen/Documents/csci8980-graphics/8980-large-scenes/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/moell162/Documents/GameEngine/8980-large-scenes/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -111,17 +111,17 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named Lua
+# Target rules for targets named glad
 
 # Build rule for target.
-Lua: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 Lua
-.PHONY : Lua
+glad: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 glad
+.PHONY : glad
 
 # fast build rule for target.
-Lua/fast:
-	$(MAKE) -f CMakeFiles/Lua.dir/build.make CMakeFiles/Lua.dir/build
-.PHONY : Lua/fast
+glad/fast:
+	$(MAKE) -f CMakeFiles/glad.dir/build.make CMakeFiles/glad.dir/build
+.PHONY : glad/fast
 
 #=============================================================================
 # Target rules for targets named engine
@@ -137,19 +137,6 @@ engine/fast:
 .PHONY : engine/fast
 
 #=============================================================================
-# Target rules for targets named glad
-
-# Build rule for target.
-glad: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 glad
-.PHONY : glad
-
-# fast build rule for target.
-glad/fast:
-	$(MAKE) -f CMakeFiles/glad.dir/build.make CMakeFiles/glad.dir/build
-.PHONY : glad/fast
-
-#=============================================================================
 # Target rules for targets named imgui
 
 # Build rule for target.
@@ -161,6 +148,19 @@ imgui: cmake_check_build_system
 imgui/fast:
 	$(MAKE) -f CMakeFiles/imgui.dir/build.make CMakeFiles/imgui.dir/build
 .PHONY : imgui/fast
+
+#=============================================================================
+# Target rules for targets named Lua
+
+# Build rule for target.
+Lua: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 Lua
+.PHONY : Lua
+
+# fast build rule for target.
+Lua/fast:
+	$(MAKE) -f CMakeFiles/Lua.dir/build.make CMakeFiles/Lua.dir/build
+.PHONY : Lua/fast
 
 Lua/src/lapi.o: Lua/src/lapi.c.o
 
@@ -1708,11 +1708,11 @@ help:
 	@echo "... clean"
 	@echo "... depend"
 	@echo "... rebuild_cache"
-	@echo "... Lua"
 	@echo "... edit_cache"
-	@echo "... engine"
 	@echo "... glad"
+	@echo "... engine"
 	@echo "... imgui"
+	@echo "... Lua"
 	@echo "... Lua/src/lapi.o"
 	@echo "... Lua/src/lapi.i"
 	@echo "... Lua/src/lapi.s"
