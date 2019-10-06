@@ -32,7 +32,7 @@ void updateKeyboardState(){
   keys.c = keyboardState[SDL_SCANCODE_C];
 }
 
-void keyboardUpdateLau(lua_State* L){
+void keyboardUpdateLua(lua_State* L){
   //Call special keyHandler function in lua
 		//---------------
 		lua_getglobal(L, "keyHandler");

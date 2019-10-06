@@ -11,15 +11,6 @@
 
 #include <external/loguru.hpp>
 
-bool useBloom = false;
-bool useShadowMap = true;
-bool drawColliders = false;
-
-int targetFrameRate = 30;
-float secondsPerFrame = 1.0f / (float)targetFrameRate;
-float nearPlane = 0.5;
-float farPlane = 10;
-
 #include "luaSupport.h"
 
 #include "RenderingSystem.h"
@@ -51,6 +42,17 @@ const string materialsFile = "materials.txt";
 const string modelFile = "Prefabs.txt";
 const string sceneFile = "Scene.txt";
 
+// default global config variables
+bool useBloom = false;
+bool useShadowMap = true;
+bool drawColliders = false;
+
+int targetFrameRate = 30;
+float secondsPerFrame = 1.0f / (float)targetFrameRate;
+float nearPlane = 0.5;
+float farPlane = 10;
+bool useDebugCamera = false;
+
 int targetScreenWidth = 1120;
 int targetScreenHeight = 700;
 
@@ -60,6 +62,17 @@ bool fullscreen = false;
 void Win2PPM(int width, int height);
 
 AudioManager audioManager = AudioManager();
+
+// Camera globals //TODO: make these into Camera structs!
+vec3 camPos = vec3(0,0,0);
+vec3 camDir = vec3(0,0,-1);
+vec3 camUp = vec3(0,1,0);
+vec3 lookatPoint = camPos + camDir;
+
+vec3 debugCamPos = vec3(0,0,0);
+vec3 debugCamDir = vec3(0,0,-1);
+vec3 debugCamUp = vec3(0,1,0);
+vec3 debugLookatPoint = debugCamPos + debugCamDir;
 
 void configEngine(string configFile, string configName);
 
@@ -202,11 +215,11 @@ int main(int argc, char *argv[]) {
 			}
 		}
 
-		//Read keyboard and send the state of the keys to the lau scrip
+		//Read keyboard and send the state of the keys to the lua scrip
 		updateKeyboardState();
-		keyboardUpdateLau(L);
+		keyboardUpdateLua(L);
 
-		//Read gamepad/controller and send the state to the lau script
+		//Read gamepad/controller and send the state to the lua script
 		updateControllerState();
 		gamepadUpdateLua(L);
 
@@ -234,11 +247,11 @@ int main(int argc, char *argv[]) {
 			SDL_Delay(delayFrames);
 		lastTime = (long long)SDL_GetTicks();
 
-		//Get the camera state from the Lua Script
-		vec3 camPos = getCameraPosFromLau(L);
-		vec3 camDir = getCameraDirFromLau(L);
-		vec3 camUp = getCameraUpFromLau(L);
-		vec3 lookatPoint = camPos + camDir;
+		//Get the camera state from the Lua Script -- rendering camera //TODO: use a struct!
+		camPos = getCameraPosFromLua(L);
+		camDir = getCameraDirFromLua(L);
+		camUp = getCameraUpFromLua(L);
+		lookatPoint = camPos + camDir;
 
 		//LOG_F(3,"Read Camera from Lua");
 
@@ -481,15 +494,24 @@ void configEngine(string configFile, string configName) {
 			sscanf(rawline, "nearPlane = %f", &val);
 			nearPlane = val;
 			LOG_F(1, "Near plane set to: %f", nearPlane);
-			LOG_F(INFO, "Near plane set to: %f", nearPlane);
-
 		}
 		if (commandStr == "farPlane") {
 			float val;
 			sscanf(rawline, "farPlane = %f", &val);
 			farPlane = val;
 			LOG_F(1, "Far plane set to: %f", farPlane);
-			LOG_F(INFO, "Far plane set to: %f", farPlane);
+		}
+		if (commandStr == "useDebugCamera") {
+			int val;
+			sscanf(rawline, "useDebugCamera = %d", &val);
+			useDebugCamera = val;
+			LOG_F(1, "Using Debug Camera: %s", useDebugCamera ? "TRUE" : "FALSE");
+		}
+		if (commandStr == "debugCamPos") {
+			vec3 pos = vec3(0,0,0);
+			sscanf(rawline, "debugCamPos = %f %f %f", &pos.x, &pos.y, &pos.z);
+			debugCamPos = pos;
+			LOG_F(INFO, "Debug camera position: %f , %f , %f", pos.x, pos.y, pos.z);
 		}
 	}
 }

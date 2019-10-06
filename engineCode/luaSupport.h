@@ -42,9 +42,9 @@ int resetTransformation(lua_State * L);
 
 
 #include "GPU-Includes.h"
-glm::vec3 getCameraPosFromLau(lua_State * L);
-glm::vec3 getCameraDirFromLau(lua_State * L);
-glm::vec3 getCameraUpFromLau(lua_State * L);
+glm::vec3 getCameraPosFromLua(lua_State * L);
+glm::vec3 getCameraDirFromLua(lua_State * L);
+glm::vec3 getCameraUpFromLua(lua_State * L);
 
 
 //Collision System
