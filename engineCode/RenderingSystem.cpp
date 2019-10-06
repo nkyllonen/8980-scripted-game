@@ -431,6 +431,75 @@ void drawSceneGeometry(vector<Model *> toDraw, glm::vec3 forward, glm::vec3 camP
 	}
 }
 
+// drawing lines reference: https://solarianprogrammer.com/2013/05/13/opengl-101-drawing-primitives/
+unsigned int frustumVAO;
+Shader basicShader;
+
+void drawFrustum() {
+	// LOG_F(INFO, "Drawing frustum");
+
+	// float corners[12] = {
+	// 	// 0,-10,1,
+	// 	// 0,10,1
+	// 	1,10,-10,
+	// 	1,
+	// };
+
+ 	float corners[24] = {
+ 		0.0, 0.0,
+ 		0.5, 0.0,
+ 		0.5, 0.5,
+ 
+ 		0.0, 0.0,
+ 		0.0, 0.5,
+ 		-0.5, 0.5,
+ 
+ 		0.0, 0.0,
+ 		-0.5, 0.0,
+ 		-0.5, -0.5,
+ 
+ 		0.0, 0.0,
+ 		0.0, -0.5,
+ 		0.5, -0.5,
+	};
+
+	// init basic shader for lines
+	basicShader = Shader("shaders/basic-vert.glsl", "shaders/basic-frag.glsl");
+	basicShader.init();
+
+	//Build a Vertex Array Object for the frustrum. This stores the VBO to shader attribute mappings
+	glGenVertexArrays(1, &frustumVAO); //Create a VAO
+	glBindVertexArray(frustumVAO);		//Bind the above created VAO to the current context
+
+ 	// Create a Vector Buffer Object that will store the vertices on video memory
+	GLuint frustumVBO;
+	glGenBuffers(1, &frustumVBO);
+
+	// Allocate space and upload the data from CPU to GPU
+ 	glBindBuffer(GL_ARRAY_BUFFER, frustumVBO);
+ 	glBufferData(GL_ARRAY_BUFFER, sizeof(corners), corners, GL_STATIC_DRAW);
+
+	// Get the location of the attributes that enters in the vertex shader
+ 	GLint position_attribute = glGetAttribLocation(basicShader.ID, "position");
+ 
+ 	// Specify how the data for position can be accessed
+ 	// glVertexAttribPointer(position_attribute, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	 glVertexAttribPointer(position_attribute, 2, GL_FLOAT, GL_FALSE, 0, 0);
+	//(above params: Attribute, vals/attrib., type, normalized?, stride, offset)
+ 
+ 	// Enable the attribute
+ 	glEnableVertexAttribArray(position_attribute);
+
+	glDrawArrays(GL_TRIANGLES, 0, 12);
+	//void glDrawArrays(GLenum mode, GLint first, GLsizei count);
+
+	// don't fill by default
+	// glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
+	// Unbind the VAO once we have set all the attributes
+	glBindVertexArray(0);
+}
+
 //-------------  Final Composite --------------
 
 Shader compositeShader;

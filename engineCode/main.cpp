@@ -323,6 +323,9 @@ int main(int argc, char *argv[]) {
 		// depth culling
 		drawSceneGeometry(curScene.toDraw, camDir, camPos, nearPlane, farPlane);
 
+		// if (useDebugCamera) drawFrustum();
+		// drawFrustum();
+
 		//TODO: Add a pass which draws some items without depth culling (e.g. keys, items)
 		if (drawColliders)
 			drawColliderGeometry(); //Pass 2B: Draw Colliders
