@@ -427,7 +427,7 @@ void drawSceneGeometry(vector<Model*> toDraw, glm::vec3 forward, glm::vec3 camPo
 
 		//TODO compute the six planes for depth culling here
 		//TODO remove this later
-		//aspectRatio = aspectRatio / 2;
+		aspectRatio = aspectRatio / 2;
 		
 		//Step 1: compute near points
 		float yNear = nearPlane * tan(fov / 2);
@@ -449,22 +449,34 @@ void drawSceneGeometry(vector<Model*> toDraw, glm::vec3 forward, glm::vec3 camPo
 
 
 		//Step 3: compute the normal vectors for all six planes
-		glm::vec3 left = glm::cross((nearTopLeft - nearBottomLeft),(farBottomLeft - nearBottomLeft));
-		
+		glm::vec3 left = glm::cross((nearTopLeft - nearBottomLeft),(farBottomLeft - nearBottomLeft));	
 		glm::vec3 right = glm::cross((nearTopRight - nearBottomRight), (farBottomRight - nearBottomRight));
-		//glm::vec3 top = glm::cross((nearTopRight - nearBottomRight), (farBottomRight - nearBottomRight));
-		//glm::vec3 bottom = 
-		//glm::vec3 far = 
-		//glm::vec3 near = 
+		glm::vec3 top = glm::cross((nearTopRight - farTopRight), (farTopLeft - farTopRight));
+		glm::vec3 bottom = glm::cross((farBottomLeft - nearBottomLeft), (nearBottomLeft - nearBottomRight));
+		glm::vec3 far = glm::cross((farTopLeft - farTopRight), (farBottomRight - farTopRight));
+		glm::vec3 near = glm::cross((nearTopLeft - nearTopRight), (nearBottomRight - nearTopRight));
 
 		//Step 4: Compute dot product of object with normal vector above
 		float leftVal = glm::dot(left,glm::vec3(pos4)-camPos);
+		float rightVal = glm::dot(right,glm::vec3(pos4)-camPos);
+		float topVal = glm::dot(top,glm::vec3(pos4)-camPos);
+		float bottomVal = glm::dot(bottom,glm::vec3(pos4)-camPos);
+		float farVal = glm::dot(far,glm::vec3(pos4)-camPos);
+		float nearVal = glm::dot(near,glm::vec3(pos4)-camPos);
+		
+		
 
 		//Step 5: Test if resulting dot proucts are positive
 		bool leftBool = leftVal > 0;
+		bool rightBool = leftVal > 0;
+		bool topBool = leftVal > 0;
+		bool bottomBool = leftVal > 0;
+		bool farBool = leftVal > 0;
+		bool nearBool = leftVal > 0;
+		
 
 		// render if between near and far planes
-		if (d + radius > nearPlane && d - radius < farPlane && leftBool) drawGeometry(*toDraw[i], -1, I);
+		if (d + radius > nearPlane && d - radius < farPlane && leftBool && rightBool && topBool && bottomBool && farBool && nearBool) drawGeometry(*toDraw[i], -1, I);
 	}
 }
 
