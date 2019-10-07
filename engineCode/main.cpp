@@ -326,7 +326,7 @@ int main(int argc, char *argv[]) {
 		// drawSceneGeometry(curScene.toDraw); //Pass 2A: Draw Scene Geometry
 
 		// depth culling
-		drawSceneGeometry(curScene.toDraw, camDir, camUp, camPos, nearPlane, farPlane, screenWidth / (float) screenHeight, FOV);
+		drawSceneGeometry(curScene.toDraw, camDir, camUp, camPos, nearPlane, farPlane, screenWidth / (float) screenHeight, FOV * 3.14f / 180);
 
 		// if (useDebugCamera) drawFrustum();
 		// drawFrustum();

@@ -451,13 +451,6 @@ void drawSceneGeometry(vector<Model*> toDraw, glm::vec3 forward, glm::vec3 up, g
 		// world position = rightmost column of transform
 		glm::vec4 pos4 = models[toDraw[i]->ID].transform * glm::vec4(0, 0, 0, 1);
 
-		// projection along forward
-		// float d = glm::dot(glm::vec3(pos4) - camPos, forward);
-
-		//TODO: compute the six planes for depth culling here
-		//TODO: remove this later
-		// aspectRatio = aspectRatio / 2;
-
 		//Step 4: Compute dot product of object with normal vector above
 		float leftVal = glm::dot(glm::vec3(pos4)-nearTopLeft, left);
 		float rightVal = glm::dot(glm::vec3(pos4)-nearTopRight, right);
@@ -467,10 +460,10 @@ void drawSceneGeometry(vector<Model*> toDraw, glm::vec3 forward, glm::vec3 up, g
 		float nearVal = glm::dot(glm::vec3(pos4)-nearTopLeft, near);
 
 		// if (d + radius > nearPlane && d - radius < farPlane && leftBool && rightBool && topBool && bottomBool && farBool && nearBool) drawGeometry(*toDraw[i], -1, I);
-		if (leftVal < 0) continue;
-		// if (rightVal < 0) continue;
-		// if (topVal < 0) continue;
-		// if (bottomVal < 0) continue;
+		if (leftVal < 0) continue; // broken
+		if (rightVal < 0) continue; // broken
+		if (topVal < 0) continue; // broken
+		if (bottomVal < 0) continue; // seems fine?
 		if (farVal < 0) continue;
 		if (nearVal < 0) continue;
 
