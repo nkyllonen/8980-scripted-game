@@ -33,7 +33,7 @@ void luaSetup(lua_State * L){
 
 //----------- Camera ----------
 
-glm::vec3 getCameraPosFromLau(lua_State * L){
+glm::vec3 getCameraPosFromLua(lua_State * L){
 	glm::vec3 cameraPos;
 	int argc = lua_gettop(L);
 	lua_getglobal(L, "CameraPosX");
@@ -46,7 +46,7 @@ glm::vec3 getCameraPosFromLau(lua_State * L){
 	return cameraPos;
 }
 
-glm::vec3 getCameraDirFromLau(lua_State * L){
+glm::vec3 getCameraDirFromLua(lua_State * L){
 	glm::vec3 cameraDir;
 	int argc = lua_gettop(L);
 	lua_getglobal(L, "CameraDirX");
@@ -59,7 +59,7 @@ glm::vec3 getCameraDirFromLau(lua_State * L){
 	return cameraDir;
 }
 
-glm::vec3 getCameraUpFromLau(lua_State * L){
+glm::vec3 getCameraUpFromLua(lua_State * L){
 	glm::vec3 cameraUp;
 	int argc = lua_gettop(L);
 	lua_getglobal(L, "CameraUpX");
