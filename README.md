@@ -1,6 +1,10 @@
 # 8980-large-scenes
 
 ```
+# build Makefile using cmake
+$ cd build
+$ cmake ..
+
 # build engine
 $ make -C <location of build/>
 
