@@ -52,6 +52,7 @@ float secondsPerFrame = 1.0f / (float)targetFrameRate;
 float nearPlane = 0.5;
 float farPlane = 10;
 bool useDebugCamera = false;
+vec3 defaultDebugPos = vec3(10,10,10);
 
 int targetScreenWidth = 1120;
 int targetScreenHeight = 700;
@@ -258,8 +259,14 @@ int main(int argc, char *argv[]) {
 		camUp = getCameraUpFromLua(L);
 		lookatPoint = camPos + camDir;
 
+    // default the debug camera = main camera
+    debugCamPos = camPos;
+    debugCamUp = camUp;
+    debugCamDir = camDir;
+    debugLookatPoint = lookatPoint;
+
 		if (useDebugCamera) {
-			debugCamUp = camUp;
+      debugCamPos = defaultDebugPos;
 			debugCamDir = glm::normalize(camPos - debugCamPos); // look at the rendering camera
 			debugLookatPoint = debugCamPos + debugCamDir;
 		}
@@ -305,13 +312,15 @@ int main(int argc, char *argv[]) {
 
 		//------ PASS 2 - Main (PBR) Shading Pass --------------------
 
-		mat4 view = glm::lookAt(camPos,																	//Camera Position
-								lookatPoint,															//Point to look at (camPos + camDir)
-								camUp);																	//Camera Up direction
+		mat4 view = glm::lookAt(debugCamPos, debugLookatPoint, debugCamUp);
+    
+    /*mat4 view = glm::lookAt(camPos,									//Camera Position
+								lookatPoint,												//Point to look at (camPos + camDir)
+								camUp);															//Camera Up direction
 		
 		if (useDebugCamera) {
 			view = glm::lookAt(debugCamPos, debugLookatPoint, debugCamUp);
-		}
+		}*/
 
 		mat4 proj = glm::perspective(FOV * 3.14f / 180, screenWidth / (float)screenHeight, .2f, 20.0f); //FOV, aspect, near, far
 		//view = lightViewMatrix; proj = lightProjectionMatrix;  //This was useful to visualize the shadowmap
@@ -529,8 +538,8 @@ void configEngine(string configFile, string configName) {
 		if (commandStr == "debugCamPos") {
 			vec3 pos = vec3(0,0,0);
 			sscanf(rawline, "debugCamPos = %f %f %f", &pos.x, &pos.y, &pos.z);
-			debugCamPos = pos;
-			LOG_F(INFO, "Debug camera position: %f , %f , %f", pos.x, pos.y, pos.z);
+			defaultDebugPos = pos;
+			LOG_F(1, "Debug camera position: %f , %f , %f", pos.x, pos.y, pos.z);
 		}
 	}
 }
