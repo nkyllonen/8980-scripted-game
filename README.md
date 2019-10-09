@@ -1,6 +1,7 @@
 # CSCI 8980, HW 2 - Rendering Large Scenes
-Nikki Kyllonen, [nkyllonen](https://github.com/nkyllonen)
-Emily Moeller, [ecmoeller][https://github.com/ecmoeller]
+- Nikki Kyllonen, [nkyllonen](https://github.com/nkyllonen)
+
+- Emily Moeller, [ecmoeller](https://github.com/ecmoeller)
 
 ## Building and Running Instructions
 ```
