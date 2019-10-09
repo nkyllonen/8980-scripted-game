@@ -49,15 +49,11 @@ Low poly tree obj package: [TurboSquid link](https://www.turbosquid.com/3d-model
 ### Problem 1: Images and small captions
 - 1a: This is a sample scene containing a simple trex model, a teapot model, and a small, tiled floor. Run as such: ./engine SimpleExample/
 
-<!-- ![Simple Scene](images/simple-scene.png) -->
-
-<img src="https://github.com/nkyllonen/8980-large-scenes/blob/master/images/simple-scene.png" width="80%"/>
+<img src="images/simple-scene.png" width="800px"/>
 
 - 1b: This is a scene containing the same teapot model from above and an oak tree model which we downloaded from TurboSquid. See the resources section for a link to download the package.
 
-<!-- ![Oak Tree](images/oak-tree-model.png) -->
-
-<img src="images/oak-tree-model.png" width="80%"/>
+<img src="images/oak-tree-model.png" width="800px"/>
 
 - 1c: This video showcases our dynamic camera. By using the left/right arrow keys, you are able to rotate the camera to the left/right respectively. By using the up/down arrow keys, you are able to move the camera forward/backward respectively.
 
@@ -65,9 +61,7 @@ Low poly tree obj package: [TurboSquid link](https://www.turbosquid.com/3d-model
 
 - 1d: This is our `Problem1` scene which contains 100 small oak tree models. As shown in the text box in the upper left hand corner, which so many triangles to render, the FPS dropped from 30 to single digits.
 
-<!-- ![Low FPS forest](images/forest_low-fps.png) -->
-
-<img src="images/forest_low-fps.png" width="80%"/>
+<img src="images/forest_low-fps.png" width="800px"/>
 
 ### Problem 2: Acceleration Techniques
 _Describe what approaches you took to accelerating your slow scene from 1d. Include images documenting changes in visual quality with and without your acceleration code._
