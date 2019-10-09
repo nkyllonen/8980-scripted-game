@@ -312,16 +312,9 @@ int main(int argc, char *argv[]) {
 
 		//------ PASS 2 - Main (PBR) Shading Pass --------------------
 
+    // build view matrix using debug camera
 		mat4 view = glm::lookAt(debugCamPos, debugLookatPoint, debugCamUp);
     
-    /*mat4 view = glm::lookAt(camPos,									//Camera Position
-								lookatPoint,												//Point to look at (camPos + camDir)
-								camUp);															//Camera Up direction
-		
-		if (useDebugCamera) {
-			view = glm::lookAt(debugCamPos, debugLookatPoint, debugCamUp);
-		}*/
-
 		mat4 proj = glm::perspective(FOV * 3.14f / 180, screenWidth / (float)screenHeight, .2f, 20.0f); //FOV, aspect, near, far
 		//view = lightViewMatrix; proj = lightProjectionMatrix;  //This was useful to visualize the shadowmap
 
