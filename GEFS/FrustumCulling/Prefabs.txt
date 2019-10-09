@@ -67,6 +67,14 @@ objModel = Floor_Modular.obj
 scale .1
 objModel = Trex.obj #Triceratops
 
-[Tree]
+[Oak]
 scale 0.1
 objModel = Oak_Tree.obj
+
+[Poplar]
+scale 0.1
+objModel = Poplar_Tree.obj
+
+[Fir]
+scale 0.1
+objModel = Fir_Tree.obj

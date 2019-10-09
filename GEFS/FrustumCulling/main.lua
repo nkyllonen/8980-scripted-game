@@ -1,5 +1,10 @@
 --Simple Example
-print("Starting Lua for HW2 Problem 1")
+print("Starting Lua for HW2 Mixed Forest Scene")
+
+require "math"
+require "io"
+
+math.randomseed( os.time() )
 
 --Todo:
 -- Lua modules (for better organization, and maybe reloading?)
@@ -79,9 +84,20 @@ setModelMaterial(id,"Gold")
 -- forest
 trees = {}
 idx = 1
+r = 0
 for i = -10, 10 do
   for j = -10, 10 do
-    trees[idx] = addModel("Tree", i, 0, j)
+    r = math.random(0,2)
+
+    if r == 0 then
+      trees[idx] = addModel("Oak", i, 0, j)
+    end
+    if r == 1 then
+      trees[idx] = addModel("Poplar", i, 0, j)
+    end
+    if r ==2 then
+      trees[idx] = addModel("Fir", i, 0, j)
+    end
     idx = idx + 1
   end
 end

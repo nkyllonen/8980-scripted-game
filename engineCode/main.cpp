@@ -312,7 +312,7 @@ int main(int argc, char *argv[]) {
 
 		//------ PASS 2 - Main (PBR) Shading Pass --------------------
 
-    // build view matrix using debug camera
+    	// build view matrix using debug camera
 		mat4 view = glm::lookAt(debugCamPos, debugLookatPoint, debugCamUp);
     
 		mat4 proj = glm::perspective(FOV * 3.14f / 180, screenWidth / (float)screenHeight, .2f, 20.0f); //FOV, aspect, near, far
@@ -325,13 +325,11 @@ int main(int argc, char *argv[]) {
 		glClearColor(0, 0, 0, 1);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		// drawSceneGeometry(curScene.toDraw); //Pass 2A: Draw Scene Geometry
-
-		// depth culling
+		// frustum culling
 		drawSceneGeometry(curScene.toDraw, camDir, camUp, camPos, nearPlane, farPlane, screenWidth / (float) screenHeight, FOV * 3.14f / 180);
 
+		//TODO: draw frustum outline
 		// if (useDebugCamera) drawFrustum();
-		// drawFrustum();
 
 		//TODO: Add a pass which draws some items without depth culling (e.g. keys, items)
 		if (drawColliders)

@@ -46,3 +46,6 @@ imgui.ini
 # Build
 build/*
 !build/.gitkeep
+
+# Screenshots
+GEFS/Screenshots/*
