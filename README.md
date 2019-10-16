@@ -6,10 +6,10 @@
 ## Building and Running Instructions
 ```
 # build Makefile using cmake
-$ cd build
 $ cmake ..
 
 # build engine
+$ cd GEFS
 $ make -C <location of build/>
 
 # to run a scene
