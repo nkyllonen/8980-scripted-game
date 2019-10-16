@@ -5,7 +5,7 @@
 *.slo
 *.lo
 *.o
-*.obj
+#*.obj
 
 # Precompiled Headers
 *.gch
@@ -30,3 +30,22 @@
 *.exe
 *.out
 *.app
+engine
+
+# CMake
+CMakeFiles
+CMakeCache.txt
+.DS_Store
+*.cmake
+*.log
+imgui.ini
+
+# Vim
+*.swp
+
+# Build
+build/*
+!build/.gitkeep
+
+# Screenshots
+GEFS/Screenshots/*
