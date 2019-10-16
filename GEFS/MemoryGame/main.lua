@@ -57,27 +57,18 @@ function keyHandler(keys)
   end
 end
 
--- bottom row
-id = addModel("Tile", 0,0, -1.8)
-setModelMaterial(id, "Shiny Red Plastic")
-id = addModel("Tile", 0,0,-0.6)
-setModelMaterial(id, "Shiny Red Plastic")
-id = addModel("Tile", 0,0, 0.6)
-setModelMaterial(id, "Shiny Red Plastic")
-id = addModel("Tile", 0,0, 1.8)
-setModelMaterial(id, "Shiny Red Plastic")
+-- arrays containing world objects
+tiles = {}
 
--- id = addModel("Teapot",0,0,0)
--- setModelMaterial(id,"Shiny Red Plastic")
--- --setModelMaterial(id,"Steel")
--- animatedModels[id] = true
--- rotYVelModel[id] = 1
--- id = addModel("FloorPart",0,0,0)
--- placeModel(id,0,-.02,0)
--- scaleModel(id,3,1,3)
--- setModelMaterial(id,"Gold")
--- piller = addModel("Dino",0,0,-.15)  --VeryFancyCube
---placeModel(piller,-1.5,1.5,0.5)
---scaleModel(piller,.5,0.5,1.5)
---animatedModels[piller] = true
---rotZVelModel[piller] = 1
+-- bottom row
+idx = 1
+for z = -1.8, 1.8, 1.2 do
+  tiles[idx] = addModel("Tile", 0, 0, z)
+  setModelMaterial(tiles[idx], "Shiny Red Plastic")
+
+  -- rotate models around y-axis
+  animatedModels[tiles[idx]] = true
+  rotYVelModel[tiles[idx]] = 1
+
+  idx = idx + 1
+end
