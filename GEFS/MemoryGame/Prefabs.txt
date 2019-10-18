@@ -50,6 +50,7 @@ scalexyz .9 .9 .75
 flatModel = knot.txt
 
 [Tile]
+material [Dark Polished Wood]
 scalexyz .1 1 1
 flatModel = cube.txt 
 
@@ -67,6 +68,13 @@ objModel = Floor_Modular.obj
 scale .1
 objModel = Trex.obj #Triceratops
 
+[CardTeapot]
+material [Aluminium]
+translate 0.3 0 0
+scale 0.7
+rotate 90 0 1 0
+flatModel = teapot.txt
+
 [TeapotTile]
 child [Tile]
-child [Teapot]
+child [CardTeapot]
