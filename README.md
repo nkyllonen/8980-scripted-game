@@ -36,6 +36,7 @@ $ ./engine <folder containing main.lua> Debug
 
 - Potion Pack
 
+- Farm Animals Pack by Quaternius [https://www.patreon.com/quaternius](https://www.patreon.com/quaternius)
 
 ## Controls
 - Arrow keys are scene dependent
