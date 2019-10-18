@@ -1,0 +1,147 @@
+
+modelDir = ./models/
+
+#teapot knot sphere teapotLowPoly teapot cube
+
+[TeapotLowPoly]
+rotate 90 1 0 0
+scale .9
+flatModel = teapotLowPoly.txt
+
+[TeapotHighPoly]
+translate 0 .25 0
+rotate 90 -1 0 0
+flatModel = teapot.txt   
+
+[Teapot]
+child [TeapotHighPoly]
+#child [TeapotLowPoly]
+
+[Sphere]
+flatModel = sphere.txt   
+
+[Cube]
+flatModel = cube.txt
+
+[FancyCube]
+scale 0.39
+objModel = fancyCube.obj
+
+[Cube2]
+scale 1
+flatModel = knot.txt
+
+[CubeOuter]
+material [Dark Polished Wood] #[Polished Wood]
+objModel = cubeOuter.obj
+
+[CubeInner]
+material [Glowly White]
+objModel = simpleCube.obj
+
+[VeryFancyCube]
+scale 0.39
+child [CubeOuter]
+child [CubeInner]
+
+[Knot]
+textureWrap 2 1.5
+scalexyz .9 .9 .75
+flatModel = knot.txt
+
+[Tile]
+material [Dark Polished Wood]
+scalexyz .1 1 1
+flatModel = cube.txt 
+
+[Floor]
+scalexyz 1 1 .5
+material [Clay]
+flatModel = cube.txt 
+
+[FloorPart]
+scalexyz 0.5 0.5 0.5
+material [Clay]
+objModel = Floor_Modular.obj
+
+[Dino]
+scale .1
+objModel = Trex.obj #Triceratops
+
+[TeapotCard]
+material [Aluminium]
+translate 0.3 0 0
+scale 0.7
+rotate 90 0 1 0
+flatModel = teapot.txt
+
+[TeapotTile]
+child [Tile]
+child [TeapotCard]
+
+[CarrotCard]
+translate 0.4 -0.45 0
+scale 0.5
+objModel = Carrot.obj
+
+[CarrotTile]
+child [Tile]
+child [CarrotCard]
+
+[BottleCard]
+translate 0.3 -0.25 0
+scale 0.15
+objModel = bottle.obj
+
+[BottleTile]
+child [Tile]
+child [BottleCard]
+
+[PoplarCard]
+translate 0.3 -0.45 0
+scale 0.15
+objModel = Poplar_Tree.obj
+
+[PoplarTile]
+child [Tile]
+child [PoplarCard]
+
+[BoatCard]
+translate 0.1 0 0
+scale 0.05
+rotate 90 0 1 0
+rotate 90 1 0 0
+objModel = boat_small.obj
+
+[BoatTile]
+child [Tile]
+child [BoatCard]
+
+[ShipCard]
+translate 0.1 -0.1 0
+scale 0.01
+rotate 90 0 1 0
+rotate 90 1 0 0
+objModel = ship_dark.obj
+
+[ShipTile]
+child [Tile]
+child [ShipCard]
+
+[SheepCard]
+translate 0.3 -0.3 0
+scale 0.1
+objModel = Sheep.obj
+
+[SheepTile]
+child [Tile]
+child [SheepCard]
+
+[PugCard]
+translate 0.3 -0.2 0
+scale 0.1
+objModel = Pug.obj
+
+[PugTile]
+child [Tile]
+child [PugCard]

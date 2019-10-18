@@ -26,7 +26,17 @@ $ ./engine <folder containing main.lua> Debug
 ## Final Submission Video
 
 ## Resources
-Low poly tree obj package: [TurboSquid link](https://www.turbosquid.com/3d-models/blender-carrot-crystal-oak-tree-3d-model-1189852)
+- Low poly tree obj package: [TurboSquid link](https://www.turbosquid.com/3d-models/blender-carrot-crystal-oak-tree-3d-model-1189852)
+
+- Pirate Kit (1.1): Created/distributed by Kenney [(www.kenney.nl)](www.kenney.nl)
+
+- Farm Animals Pack by Quaternius [https://www.patreon.com/quaternius](https://www.patreon.com/quaternius)
+
+- Pirate Pack
+
+- Potion Pack
+
+- Farm Animals Pack by Quaternius [https://www.patreon.com/quaternius](https://www.patreon.com/quaternius)
 
 ## Controls
 - Arrow keys are scene dependent
