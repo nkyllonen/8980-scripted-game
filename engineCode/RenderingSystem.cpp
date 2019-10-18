@@ -440,8 +440,8 @@ void drawSceneGeometry(vector<Model*> toDraw, glm::vec3 forward, glm::vec3 up, g
 	glm::vec3 right = glm::normalize(glm::cross((nearTopRight - nearBottomRight), (farBottomRight - nearBottomRight)));
 	glm::vec3 top = glm::normalize(glm::cross((nearTopRight - farTopRight), (farTopLeft - farTopRight)));
 	glm::vec3 bottom = glm::normalize(glm::cross((farBottomLeft - nearBottomLeft), (nearBottomLeft - nearBottomRight)));
-	glm::vec3 near = forward;
-	glm::vec3 far = -near;
+	glm::vec3 near2 = forward;
+	glm::vec3 far2 = -near2;
 
 	glm::mat4 I;
 	totalTriangles = 0;
@@ -456,8 +456,8 @@ void drawSceneGeometry(vector<Model*> toDraw, glm::vec3 forward, glm::vec3 up, g
 		float rightVal = glm::dot(glm::vec3(pos4)-nearTopRight, right);
 		float topVal = glm::dot(glm::vec3(pos4)-nearTopLeft, top);
 		float bottomVal = glm::dot(glm::vec3(pos4)-nearBottomRight, bottom);
-		float farVal = glm::dot(glm::vec3(pos4)-farTopLeft, far);
-		float nearVal = glm::dot(glm::vec3(pos4)-nearTopLeft, near);
+		float farVal = glm::dot(glm::vec3(pos4)-farTopLeft, far2);
+		float nearVal = glm::dot(glm::vec3(pos4)-nearTopLeft, near2);
 
 		// if (d + radius > nearPlane && d - radius < farPlane && leftBool && rightBool && topBool && bottomBool && farBool && nearBool) drawGeometry(*toDraw[i], -1, I);
 		if (leftVal < 0) continue; // broken
