@@ -28,7 +28,6 @@ rotYVelModel = {}
 
 function frameUpdate(dt)
   for modelID,v in pairs(animatedModels) do
-    --print("ID",modelID)
     local vel = velModel[modelID]
     if vel then 
       translateModel(modelID,dt*vel[1],dt*vel[2],dt*vel[3])
@@ -59,12 +58,25 @@ end
 
 -- arrays containing world objects
 tiles = {}
+tileItems = {}
 
 -- bottom row
 idx = 1
 for z = -1.8, 1.8, 1.2 do
   tiles[idx] = addModel("TeapotTile", 0, 0, z)
-  -- setModelMaterial(tiles[idx], "Shiny Red Plastic")
+  tileItems[idx] = "Teapot"
+
+  -- rotate models around y-axis
+  animatedModels[tiles[idx]] = true
+  rotYVelModel[tiles[idx]] = 1
+
+  idx = idx + 1
+end
+
+-- middle row
+for z = -1.8, 1.8, 1.2 do
+  tiles[idx] = addModel("CarrotTile", 0, 1.2, z)
+  tileItems[idx] = "Carrot"
 
   -- rotate models around y-axis
   animatedModels[tiles[idx]] = true
