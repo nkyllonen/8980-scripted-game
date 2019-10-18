@@ -26,6 +26,14 @@ animatedModels = {}
 velModel = {}
 rotYVelModel = {}
 
+--Tile variables
+gridLayer = 0
+gridModel = {}
+gridPos = {}
+curPos = {}
+
+
+
 function frameUpdate(dt)
   for modelID,v in pairs(animatedModels) do
     --print("ID",modelID)
@@ -57,47 +65,40 @@ function keyHandler(keys)
   end
 end
 
--- bottom row
-id = addModel("Tile", 0,-.6, -1.8)
-setModelMaterial(id, "Shiny Red Plastic")
-id = addModel("Tile", 0,-.6,-0.6)
-setModelMaterial(id, "Shiny Red Plastic")
-id = addModel("Tile", 0,-.6, 0.6)
-setModelMaterial(id, "Shiny Red Plastic")
-id = addModel("Tile", 0,-.6, 1.8)
-setModelMaterial(id, "Shiny Red Plastic")
-
---one up from bottom
-id = addModel("Tile", 0,.5, -1.8)
-setModelMaterial(id, "Shiny Red Plastic")
-id = addModel("Tile", 0,.5,-0.6)
-setModelMaterial(id, "Shiny Red Plastic")
-id = addModel("Tile", 0,.5, 0.6)
-setModelMaterial(id, "Shiny Red Plastic")
-id = addModel("Tile", 0,.5, 1.8)
-setModelMaterial(id, "Shiny Red Plastic")
-
---2 up from bottom
-id = addModel("Tile", 0,1.6, -1.8)
-setModelMaterial(id, "Shiny Red Plastic")
-id = addModel("Tile", 0,1.6,-0.6)
-setModelMaterial(id, "Shiny Red Plastic")
-id = addModel("Tile", 0,1.6, 0.6)
-setModelMaterial(id, "Shiny Red Plastic")
-id = addModel("Tile", 0,1.6, 1.8)
-setModelMaterial(id, "Shiny Red Plastic")
-
---3 up from bottom
-id = addModel("Tile", 0,2.7, -1.8)
-setModelMaterial(id, "Shiny Red Plastic")
-id = addModel("Tile", 0,2.7,-0.6)
-setModelMaterial(id, "Shiny Red Plastic")
-id = addModel("Tile", 0,2.7, 0.6)
-setModelMaterial(id, "Shiny Red Plastic")
-id = addModel("Tile", 0,2.7, 1.8)
-setModelMaterial(id, "Shiny Red Plastic")
 
 
+--Mouse handler
+
+function mouseHandler(mouse)
+  if (mouse.left and not haveClicked) then
+    hitID, dist = getMouseClickWithLayer(gridLayer) --See which grid item we clicked on
+    haveClicked = true
+
+    id = addModel("TeaPot", gridPos[hitID].x, gridPos[hitID].y, gridPos[hitID].z)
+
+
+  end
+  if (not mouse.left) then
+    haveClicked = false
+  end
+end
+
+
+--Create a 4x4 grid of tiles
+spacingY = 1.1 --Give a small space between grid cells to create boundries
+startingY = -.6
+startingZ = -1.8
+spacingZ = 1.2
+idx = 1
+for i = 0,3 do
+  for j = 0,3 do
+    gridModel[idx] = addModel("Tile",0,startingY + spacingY*i,startingZ + spacingZ*j)
+    gridPos[gridModel[idx]] = vec3(0,startingY + spacingY*i,startingZ + spacingZ*j)
+    addCollider(gridModel[idx],gridLayer,0.6,0,0,0) --Grid cell needs a collider for click interaction
+    setModelMaterial(gridModel[idx],"Dark Polished Wood")
+    idx = idx + 1
+  end
+end
 
 
 -- id = addModel("Teapot",0,0,0)
