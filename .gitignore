@@ -43,10 +43,6 @@ imgui.ini
 # Vim
 *.swp
 
-# Build
-build/*
-!build/.gitkeep
-
 # Screenshots
 GEFS/Screenshots/*
 
