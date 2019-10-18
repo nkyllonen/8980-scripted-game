@@ -62,12 +62,13 @@ tileItems = {}
 
 -- bottom row
 idx = 1
+y = 0
 for z = -1.8, 1.8, 1.2 do
   if idx % 2 == 0 then
-    tiles[idx] = addModel("PoplarTile", 0, 0, z)
+    tiles[idx] = addModel("PoplarTile", 0, y, z)
     tileItems[idx] = "Poplar"
   else
-    tiles[idx] = addModel("BottleTile", 0, 0, z)
+    tiles[idx] = addModel("BottleTile", 0, y, z)
     tileItems[idx] = "Bottle"
   end
 
@@ -79,13 +80,32 @@ for z = -1.8, 1.8, 1.2 do
 end
 
 -- middle row
+y = y + 1.2
 for z = -1.8, 1.8, 1.2 do
   if idx % 2 == 0 then
-    tiles[idx] = addModel("CarrotTile", 0, 1.2, z)
+    tiles[idx] = addModel("CarrotTile", 0, y, z)
     tileItems[idx] = "Carrot"
   else
-    tiles[idx] = addModel("ShipTile", 0, 1.2, z)
+    tiles[idx] = addModel("ShipTile", 0, y, z)
     tileItems[idx] = "Ship"
+  end
+
+  -- rotate models around y-axis
+  animatedModels[tiles[idx]] = true
+  rotYVelModel[tiles[idx]] = 1
+
+  idx = idx + 1
+end
+
+-- top row
+y = y + 1.2
+for z = -1.8, 1.8, 1.2 do
+  if idx % 2 == 0 then
+    tiles[idx] = addModel("SheepTile", 0, y, z)
+    tileItems[idx] = "Sheep"
+  else
+    tiles[idx] = addModel("PugTile", 0, y, z)
+    tileItems[idx] = "Pug"
   end
 
   -- rotate models around y-axis

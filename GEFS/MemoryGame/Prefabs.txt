@@ -127,3 +127,21 @@ objModel = ship_dark.obj
 [ShipTile]
 child [Tile]
 child [ShipCard]
+
+[SheepCard]
+translate 0.3 -0.3 0
+scale 0.1
+objModel = Sheep.obj
+
+[SheepTile]
+child [Tile]
+child [SheepCard]
+
+[PugCard]
+translate 0.3 -0.2 0
+scale 0.1
+objModel = Pug.obj
+
+[PugTile]
+child [Tile]
+child [PugCard]
