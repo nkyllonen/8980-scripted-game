@@ -49,3 +49,7 @@ build/*
 
 # Screenshots
 GEFS/Screenshots/*
+
+# Visual Studio
+.vs/
+out/
