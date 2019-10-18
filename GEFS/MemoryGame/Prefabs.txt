@@ -66,3 +66,7 @@ objModel = Floor_Modular.obj
 [Dino]
 scale .1
 objModel = Trex.obj #Triceratops
+
+[TeapotTile]
+child [Tile]
+child [Teapot]

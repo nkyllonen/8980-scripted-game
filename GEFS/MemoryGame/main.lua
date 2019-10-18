@@ -63,7 +63,7 @@ tiles = {}
 -- bottom row
 idx = 1
 for z = -1.8, 1.8, 1.2 do
-  tiles[idx] = addModel("Tile", 0, 0, z)
+  tiles[idx] = addModel("TeapotTile", 0, 0, z)
   setModelMaterial(tiles[idx], "Shiny Red Plastic")
 
   -- rotate models around y-axis
