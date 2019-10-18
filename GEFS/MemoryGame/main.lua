@@ -58,14 +58,47 @@ function keyHandler(keys)
 end
 
 -- bottom row
-id = addModel("Tile", 0,0, -1.8)
+id = addModel("Tile", 0,-.6, -1.8)
 setModelMaterial(id, "Shiny Red Plastic")
-id = addModel("Tile", 0,0,-0.6)
+id = addModel("Tile", 0,-.6,-0.6)
 setModelMaterial(id, "Shiny Red Plastic")
-id = addModel("Tile", 0,0, 0.6)
+id = addModel("Tile", 0,-.6, 0.6)
 setModelMaterial(id, "Shiny Red Plastic")
-id = addModel("Tile", 0,0, 1.8)
+id = addModel("Tile", 0,-.6, 1.8)
 setModelMaterial(id, "Shiny Red Plastic")
+
+--one up from bottom
+id = addModel("Tile", 0,.5, -1.8)
+setModelMaterial(id, "Shiny Red Plastic")
+id = addModel("Tile", 0,.5,-0.6)
+setModelMaterial(id, "Shiny Red Plastic")
+id = addModel("Tile", 0,.5, 0.6)
+setModelMaterial(id, "Shiny Red Plastic")
+id = addModel("Tile", 0,.5, 1.8)
+setModelMaterial(id, "Shiny Red Plastic")
+
+--2 up from bottom
+id = addModel("Tile", 0,1.6, -1.8)
+setModelMaterial(id, "Shiny Red Plastic")
+id = addModel("Tile", 0,1.6,-0.6)
+setModelMaterial(id, "Shiny Red Plastic")
+id = addModel("Tile", 0,1.6, 0.6)
+setModelMaterial(id, "Shiny Red Plastic")
+id = addModel("Tile", 0,1.6, 1.8)
+setModelMaterial(id, "Shiny Red Plastic")
+
+--3 up from bottom
+id = addModel("Tile", 0,2.7, -1.8)
+setModelMaterial(id, "Shiny Red Plastic")
+id = addModel("Tile", 0,2.7,-0.6)
+setModelMaterial(id, "Shiny Red Plastic")
+id = addModel("Tile", 0,2.7, 0.6)
+setModelMaterial(id, "Shiny Red Plastic")
+id = addModel("Tile", 0,2.7, 1.8)
+setModelMaterial(id, "Shiny Red Plastic")
+
+
+
 
 -- id = addModel("Teapot",0,0,0)
 -- setModelMaterial(id,"Shiny Red Plastic")
