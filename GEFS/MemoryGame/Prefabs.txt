@@ -80,10 +80,50 @@ child [Tile]
 child [TeapotCard]
 
 [CarrotCard]
+translate 0.4 -0.45 0
 scale 0.5
-translate 0.4 -0.9 0
 objModel = Carrot.obj
 
 [CarrotTile]
 child [Tile]
 child [CarrotCard]
+
+[BottleCard]
+translate 0.3 -0.25 0
+scale 0.15
+objModel = bottle.obj
+
+[BottleTile]
+child [Tile]
+child [BottleCard]
+
+[PoplarCard]
+translate 0.3 -0.45 0
+scale 0.15
+objModel = Poplar_Tree.obj
+
+[PoplarTile]
+child [Tile]
+child [PoplarCard]
+
+[BoatCard]
+translate 0.1 0 0
+scale 0.05
+rotate 90 0 1 0
+rotate 90 1 0 0
+objModel = boat_small.obj
+
+[BoatTile]
+child [Tile]
+child [BoatCard]
+
+[ShipCard]
+translate 0.1 -0.1 0
+scale 0.01
+rotate 90 0 1 0
+rotate 90 1 0 0
+objModel = ship_dark.obj
+
+[ShipTile]
+child [Tile]
+child [ShipCard]
