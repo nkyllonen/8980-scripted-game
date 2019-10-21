@@ -27,7 +27,7 @@ velModel = {}
 rotYVelModel = {}
 
 boardSize = 4
-flipVelocity = 2.0
+flipVelocity = 4.0
 
 -- arrays containing world objects
 tiles = {}
@@ -39,7 +39,7 @@ flipped = {}
 idx = 1
 for i = 1, boardSize*boardSize, 2 do
   tileItems[i] = items[idx]
-  -- flipped[i] = false
+  flipped[i] = 0
   tileItems[i+1] = items[idx]
   idx = idx + 1
 end
@@ -47,10 +47,16 @@ end
 function frameUpdate(dt)
   -- see which models we should be flipping
   for idx, val in pairs(flipped) do
-    if val then
+    if math.abs(val) > 3.14 then
+      flipped[idx] = 0
+    elseif val > 0 then
       -- if flipped is true
       -- print("flipped @ " .. idx .. " is true")
       rotateModel(tiles[idx], flipVelocity*dt, 0 , 1, 0)
+      flipped[idx] = flipped[idx] + flipVelocity*dt
+    elseif val < 0 then
+      rotateModel(tiles[idx], -1.0*flipVelocity*dt, 0 , 1, 0)
+      flipped[idx] = flipped[idx] - flipVelocity*dt
     end
   end
 end
@@ -58,11 +64,13 @@ end
 function keyHandler(keys)
   if keys.up then
     -- flip up random tile
+    -- TODO: flip on mouse clicks instead
     r = math.random(#tileItems)
     flipUp(r)
   end
   if keys.down then
     -- flip down previous? tile
+    -- TODO: flip down on timed value
     if (flipped[r]) then
       flipDown(r)
     end
@@ -71,11 +79,12 @@ end
 
 function flipUp(index)
   print("flipping up index " .. index)
-  flipped[index] = true
+  flipped[index] = 0.1
 end
 
 function flipDown(index)
   print("flipping down index " .. index)
+  flipped[index] = -0.1
 end
 
 function initializeBoard()
@@ -93,7 +102,7 @@ function initializeBoard()
     end
 
     tiles[i] = addModel(tileItems[i] .. "Tile", 0, y, z)
-    print("tiles[i] = " .. tiles[i])
+    -- print("tiles[i] = " .. tiles[i])
     -- animatedModels[tiles[i]] = true
     -- rotYVelModel[tiles[i]] = 1
 
