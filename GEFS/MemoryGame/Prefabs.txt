@@ -106,17 +106,6 @@ objModel = Poplar_Tree.obj
 child [Tile]
 child [PoplarCard]
 
-[BoatCard]
-translate 0.1 0 0
-scale 0.05
-rotate 90 0 1 0
-rotate 90 1 0 0
-objModel = boat_small.obj
-
-[BoatTile]
-child [Tile]
-child [BoatCard]
-
 [ShipCard]
 translate 0.1 -0.1 0
 scale 0.01
@@ -145,3 +134,31 @@ objModel = Pug.obj
 [PugTile]
 child [Tile]
 child [PugCard]
+
+[CrystalCard]
+translate 0.3 -0.25 0
+scale 0.4
+objModel = Crystal.obj
+
+[CrystalTile]
+child [Tile]
+child [CrystalCard]
+
+[TowerCard]
+translate 0.5 -0.4 0
+scale 0.02
+rotate -60 0 1 0
+objModel = tower.obj
+
+[TowerTile]
+child [Tile]
+child [TowerCard]
+
+[ChestCard]
+translate 0 0 0
+scale 0.1
+objModel = chest.obj
+
+[ChestTile]
+child [Tile]
+child [ChestCard]
