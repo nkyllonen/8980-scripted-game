@@ -22,8 +22,11 @@ CameraPos = vec3(CameraPosX, CameraPosY, CameraPosZ)
 CameraDir = vec3(CameraDirX, CameraDirY, CameraDirZ)
 CameraUp = vec3(CameraUpX, CameraUpY, CameraUpZ)
 
+-- state variables
 boardSize = 4
 flipVelocity = 4.0
+maxFlipTime = 2.0
+flippedUpTime = 0.0
 
 -- arrays containing world objects
 tiles = {}
@@ -38,24 +41,37 @@ idx = 1
 for i = 1, boardSize*boardSize, 2 do
   tileItems[i] = items[idx]
   flipped[i] = 0
+
   tileItems[i+1] = items[idx]
+  flipped[i+1] = 0
   idx = idx + 1
 end
 
 function frameUpdate(dt)
-  -- flip non-zero models
-  for idx, val in pairs(flipped) do
-    if math.abs(val) > 3.14 then
-      -- stop rotating about pi radians
-      flipped[idx] = 0
-    elseif val > 0 then
-      -- positive means flipping up
-      rotateModel(tiles[idx], flipVelocity*dt, 0 , 1, 0)
-      flipped[idx] = flipped[idx] + flipVelocity*dt
-    elseif val < 0 then
-      -- negative means flipping down
-      rotateModel(tiles[idx], -1.0*flipVelocity*dt, 0 , 1, 0)
-      flipped[idx] = flipped[idx] - flipVelocity*dt
+  -- update flippedUpTime
+  if flippedUpTime > 0 then
+    flippedUpTime = flippedUpTime + dt
+  end
+
+  if flippedUpTime > maxFlipTime then
+    -- time is up
+    print("time is up!")
+    flippedUpTime = 0.0
+    for i = 1, boardSize*boardSize do
+      flipDown(i)
+    end
+  else
+    -- flip non-zero models
+    for idx, val in pairs(flipped) do
+      if (val > 0) and (val < 3.14) then
+        -- positive means flipping up
+        rotateModel(tiles[idx], flipVelocity*dt, 0 , 1, 0)
+        flipped[idx] = flipped[idx] + flipVelocity*dt
+      elseif (val < 0) and (val > -3.14) then
+        -- negative means flipping down
+        rotateModel(tiles[idx], -1.0*flipVelocity*dt, 0 , 1, 0)
+        flipped[idx] = flipped[idx] - flipVelocity*dt
+      end
     end
   end
 end
@@ -67,23 +83,20 @@ function keyHandler(keys)
     r = math.random(#tileItems)
     flipUp(r)
   end
-  if keys.down then
-    -- flip down previous? tile
-    -- TODO: remove this - should only be flipping down after x time
-    if (flipped[r]) then
-      flipDown(r)
-    end
-  end
 end
 
 function flipUp(index)
   print("flipping up index " .. index)
   flipped[index] = 0.1
+  flippedUpTime = 0.0001
 end
 
 function flipDown(index)
-  print("flipping down index " .. index)
-  flipped[index] = -0.1
+  -- if flipped up
+  if flipped[index] > 0 then
+    print("flipping down index " .. index)
+    flipped[index] = -0.1
+  end
 end
 
 function initializeBoard()
