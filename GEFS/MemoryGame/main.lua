@@ -27,52 +27,59 @@ velModel = {}
 rotYVelModel = {}
 
 boardSize = 4
-
-function frameUpdate(dt)
-  for modelID,v in pairs(animatedModels) do
-    local vel = velModel[modelID]
-    if vel then 
-      translateModel(modelID,dt*vel[1],dt*vel[2],dt*vel[3])
-    end
-
-    local rotYvel = rotYVelModel[modelID]
-    if rotYvel then 
-      rotateModel(modelID,rotYvel*dt, 0, 1, 0)
-    end
-
-  end
-end
-
-function keyHandler(keys)
-  if keys.left then
-    translateModel(piller,0,0,-0.1)
-  end
-  if keys.right then
-    translateModel(piller,0,0,0.1)
-  end
-  if keys.up then
-    translateModel(piller,0.1,0,0)
-  end
-  if keys.down then
-    translateModel(piller,-0.1,0,0)
-  end
-end
+flipVelocity = 2.0
 
 -- arrays containing world objects
 tiles = {}
 tileItems = {}
 items = {"Tower", "Crystal", "Pug", "Sheep", "Ship", "Poplar", "Bottle", "Carrot"}
+flipped = {}
 
 -- fill tileItems, 2 at a time
 idx = 1
 for i = 1, boardSize*boardSize, 2 do
   tileItems[i] = items[idx]
+  -- flipped[i] = false
   tileItems[i+1] = items[idx]
   idx = idx + 1
 end
 
+function frameUpdate(dt)
+  -- see which models we should be flipping
+  for idx, val in pairs(flipped) do
+    if val then
+      -- if flipped is true
+      -- print("flipped @ " .. idx .. " is true")
+      rotateModel(tiles[idx], flipVelocity*dt, 0 , 1, 0)
+    end
+  end
+end
+
+function keyHandler(keys)
+  if keys.up then
+    -- flip up random tile
+    r = math.random(#tileItems)
+    flipUp(r)
+  end
+  if keys.down then
+    -- flip down previous? tile
+    if (flipped[r]) then
+      flipDown(r)
+    end
+  end
+end
+
+function flipUp(index)
+  print("flipping up index " .. index)
+  flipped[index] = true
+end
+
+function flipDown(index)
+  print("flipping down index " .. index)
+end
+
 function initializeBoard()
-  -- TODO: randomize order of tileItems
+  -- randomize order of tileItems
   shuffle(tileItems)
 
   -- fill tiles according to tileItems
@@ -86,10 +93,11 @@ function initializeBoard()
     end
 
     tiles[i] = addModel(tileItems[i] .. "Tile", 0, y, z)
-    animatedModels[tiles[i]] = true
-    rotYVelModel[tiles[i]] = 1
+    print("tiles[i] = " .. tiles[i])
+    -- animatedModels[tiles[i]] = true
+    -- rotYVelModel[tiles[i]] = 1
 
-    print(tileItems[i] .. " @ (0, " .. y .. " , " .. z .. ")")
+    print(tileItems[i] .. " @ index " .. i)
     z = z + 1.2
   end
 end
