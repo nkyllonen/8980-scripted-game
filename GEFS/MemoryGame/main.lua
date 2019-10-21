@@ -1,10 +1,7 @@
 --Simple Example
 print("Starting Lua for Memory Game")
-
---Todo:
--- Lua modules (for better organization, and maybe reloading?)
-
 require "CommonLibs/vec3"
+math.randomseed(os.time())
 
 CameraPosX = -6.0
 CameraPosY = 1.0
@@ -87,7 +84,7 @@ end
 
 function flipUp(index)
   print("flipping up index " .. index)
-  flipped[index] = 0.1
+  flipped[index] = 0.0001
   flippedUpTime = 0.0001
 end
 
@@ -95,7 +92,7 @@ function flipDown(index)
   -- if flipped up
   if flipped[index] > 0 then
     print("flipping down index " .. index)
-    flipped[index] = -0.1
+    flipped[index] = -0.0001
   end
 end
 
@@ -114,10 +111,6 @@ function initializeBoard()
     end
 
     tiles[i] = addModel(tileItems[i] .. "Tile", 0, y, z)
-    -- print("tiles[i] = " .. tiles[i])
-    -- animatedModels[tiles[i]] = true
-    -- rotYVelModel[tiles[i]] = 1
-
     print(tileItems[i] .. " @ index " .. i)
     z = z + 1.2
   end
