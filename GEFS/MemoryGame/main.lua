@@ -22,10 +22,6 @@ CameraPos = vec3(CameraPosX, CameraPosY, CameraPosZ)
 CameraDir = vec3(CameraDirX, CameraDirY, CameraDirZ)
 CameraUp = vec3(CameraUpX, CameraUpY, CameraUpZ)
 
-animatedModels = {}
-velModel = {}
-rotYVelModel = {}
-
 boardSize = 4
 flipVelocity = 4.0
 
@@ -33,6 +29,8 @@ flipVelocity = 4.0
 tiles = {}
 tileItems = {}
 items = {"Tower", "Crystal", "Pug", "Sheep", "Ship", "Poplar", "Bottle", "Carrot"}
+
+-- array containing amount each tile has rotated in radians
 flipped = {}
 
 -- fill tileItems, 2 at a time
@@ -45,16 +43,17 @@ for i = 1, boardSize*boardSize, 2 do
 end
 
 function frameUpdate(dt)
-  -- see which models we should be flipping
+  -- flip non-zero models
   for idx, val in pairs(flipped) do
     if math.abs(val) > 3.14 then
+      -- stop rotating about pi radians
       flipped[idx] = 0
     elseif val > 0 then
-      -- if flipped is true
-      -- print("flipped @ " .. idx .. " is true")
+      -- positive means flipping up
       rotateModel(tiles[idx], flipVelocity*dt, 0 , 1, 0)
       flipped[idx] = flipped[idx] + flipVelocity*dt
     elseif val < 0 then
+      -- negative means flipping down
       rotateModel(tiles[idx], -1.0*flipVelocity*dt, 0 , 1, 0)
       flipped[idx] = flipped[idx] - flipVelocity*dt
     end
@@ -70,7 +69,7 @@ function keyHandler(keys)
   end
   if keys.down then
     -- flip down previous? tile
-    -- TODO: flip down on timed value
+    -- TODO: remove this - should only be flipping down after x time
     if (flipped[r]) then
       flipDown(r)
     end
