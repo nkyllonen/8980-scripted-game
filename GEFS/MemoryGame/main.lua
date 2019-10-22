@@ -35,6 +35,7 @@ curPos = {}
 
 
 function frameUpdate(dt)
+  
   for modelID,v in pairs(animatedModels) do
     --print("ID",modelID)
     local vel = velModel[modelID]
@@ -70,12 +71,12 @@ end
 --Mouse handler
 
 function mouseHandler(mouse)
+  id = addModel("Teapot",0,0,0)
+  setModelMaterial(id,"Shiny Red Plastic")
   if (mouse.left and not haveClicked) then
     hitID, dist = getMouseClickWithLayer(gridLayer) --See which grid item we clicked on
+    print("hitID",hitID)
     haveClicked = true
-
-    id = addModel("TeaPot", gridPos[hitID].x, gridPos[hitID].y, gridPos[hitID].z)
-
 
   end
   if (not mouse.left) then
@@ -101,8 +102,8 @@ for i = 0,3 do
 end
 
 
--- id = addModel("Teapot",0,0,0)
--- setModelMaterial(id,"Shiny Red Plastic")
+--id = addModel("Teapot",0,0,0)
+--setModelMaterial(id,"Shiny Red Plastic")
 -- --setModelMaterial(id,"Steel")
 -- animatedModels[id] = true
 -- rotYVelModel[id] = 1

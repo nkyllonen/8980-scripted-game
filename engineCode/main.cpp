@@ -221,6 +221,11 @@ int main(int argc, char *argv[]) {
 			}
 		}
 
+		//Update Mouse Direction (mouseDir)
+		updateMouseDir();
+		updateMouseState();
+		mouseUpdateLua(L);
+
 		//Read keyboard and send the state of the keys to the lua scrip
 		updateKeyboardState();
 		keyboardUpdateLua(L);
