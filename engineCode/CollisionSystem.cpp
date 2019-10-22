@@ -40,6 +40,34 @@ void updateColliderPositions(){
   }
 }
 
+//dir must be normalized!
+int getCollisionRay(vec3 pos, vec3 dir, float& maxDist, int layer){
+  //printf("Checking for collisions at layer %d\n",layer);
+  int hitID = -1;
+
+  for (int i = 0; i < numColliders[layer]; i++){
+    vec3 fromObj = (pos-colliders[layer][i].globalPos);
+    float b = 2*glm::dot(dir,fromObj);
+    float c = glm::dot(fromObj,fromObj) - colliders[layer][i].r*colliders[layer][i].r;
+    float disc = b*b - 4*c;
+    //printf("pos: %f %f %f\n",colliders[layer][i].globalPos.x,colliders[layer][i].globalPos.y,colliders[layer][i].globalPos.z);
+    if (disc < 0) continue; //the ray misses this sphere
+    float t = (-b - sqrt(disc))/2; //@HW, why skip the + disc case?
+    //printf("t: %f\n",t);
+    if (t < 0) continue;
+    if (t < maxDist){
+      //printf("Dir: %f %f %f\n",dir.x,dir.y,dir.z);
+      vec3 hitPoint = pos+t*dir;
+      //printf("Hit pos: %f %f %f\n",hitPoint.x,hitPoint.y,hitPoint.z);
+      vec3 ctoh = hitPoint - colliders[layer][i].globalPos;
+      //printf("Offset: %f %f %f : %f\n",ctoh.x,ctoh.y,ctoh.z, sqrt(glm::dot(ctoh,ctoh)));
+      maxDist = t;
+      hitID = colliders[layer][i].modelID;
+    }
+  }
+  return hitID;
+}
+
 int getCollision(float x, float y, float z, float rad, int layer){
   //printf("Checking for collisions at layer %d\n",layer);
   for (int i = 0; i < numColliders[layer]; i++){

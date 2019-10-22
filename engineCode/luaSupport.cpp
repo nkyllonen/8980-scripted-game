@@ -18,6 +18,8 @@ void luaSetup(lua_State * L){
 	lua_register(L, "deleteModel", deleteModel);
 	lua_register(L, "addCollider", addCollider);
 	lua_register(L, "getCollisionsWithLayer", getCollisionsWithLayer);
+	lua_register(L, "getMouseClickWithLayer",getMouseClickWithLayer);
+	lua_register(L, "getRayCollisionWithLayer",getRayCollisionWithLayer);
 	lua_register(L, "setModelColor", setModelColor);
 	lua_register(L, "rotateModel", rotateModel);
 	lua_register(L, "scaleModel", scaleModel);
@@ -184,6 +186,7 @@ int addModel(lua_State * L){
 }
 
 #include "CollisionSystem.h"
+#include "Camera.h"
 
 extern vector<int> collisionModels;
 extern int numColliders[MAX_LAYERS];
@@ -210,6 +213,51 @@ int addCollider(lua_State * L){
 	lua_pushnumber(L, colliderID);
 
 	return 1;
+}
+
+int getMouseClickWithLayer(lua_State * L){
+	int layer;
+	int argc = lua_gettop(L);
+	layer = (int)lua_tonumber(L, 1);
+
+	LOG_F(2,"Checking for collision with mouse on layer %d", layer);
+
+	float hitDist = 9e9; //TODO: This value should really be set by the depth buffer!
+	int hitID = getCollisionRay(camPos,mouseDir,hitDist,layer);
+	if (hitID >= 0){
+		LOG_F(1,"Hit found with item %d at distance %f", hitID, hitDist);
+	}
+
+	lua_pushnumber(L, hitID);
+	lua_pushnumber(L, hitDist);
+
+	return 2;
+}
+
+int getRayCollisionWithLayer(lua_State * L){
+	int layer;
+	float x,y,z,dx,dy,dz; //assumes dx,dy,dz are normalized
+	int argc = lua_gettop(L);
+	x = lua_tonumber(L, 1);
+	y = lua_tonumber(L, 2);
+	z = lua_tonumber(L, 3);
+  dx = lua_tonumber(L, 4);
+	dy = lua_tonumber(L, 5);
+	dz = lua_tonumber(L, 6);
+	layer = (int)lua_tonumber(L, 7);
+
+	LOG_F(2,"Checking for collision with ray starting at (%f %f %f) with dir (%f %f %f) on layer %d", x,y,z, dx,dy,dz, layer);
+
+	float hitDist = 9e9;
+	int hitID = getCollisionRay(glm::vec3(x,y,z),glm::vec3(dx,dy,dz),hitDist,layer);
+	if (hitID >= 0){
+		LOG_F(1,"Hit found with item %d at distance %f", hitID, hitDist);
+	}
+
+	lua_pushnumber(L, hitID);
+	lua_pushnumber(L, hitDist);
+
+	return 2;
 }
 
 int getCollisionsWithLayer(lua_State * L){

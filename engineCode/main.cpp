@@ -27,6 +27,7 @@
 #include "keyboard.h"
 #include "controller.h"
 #include "WindowManager.h"
+#include "Camera.h"
 
 #include <cstdio>
 #include <iostream>
