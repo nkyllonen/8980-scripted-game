@@ -66,10 +66,10 @@ void Win2PPM(int width, int height);
 AudioManager audioManager = AudioManager();
 
 // Camera globals //TODO: make these into Camera structs!
-vec3 camPos = vec3(0,0,0);
-vec3 camDir = vec3(0,0,-1);
-vec3 camUp = vec3(0,1,0);
-vec3 lookatPoint = camPos + camDir;
+// vec3 camPos = vec3(0,0,0);
+// vec3 camDir = vec3(0,0,-1);
+// vec3 camUp = vec3(0,1,0);
+// vec3 lookatPoint = camPos + camDir;
 
 vec3 debugCamPos = vec3(0,0,0);
 vec3 debugCamDir = vec3(0,0,-1);
@@ -263,16 +263,17 @@ int main(int argc, char *argv[]) {
 		camPos = getCameraPosFromLua(L);
 		camDir = getCameraDirFromLua(L);
 		camUp = getCameraUpFromLua(L);
-		lookatPoint = camPos + camDir;
+		vec3 lookatPoint = camPos + camDir;
+		// lookatPoint = camPos + camDir;
 
-    // default the debug camera = main camera
-    debugCamPos = camPos;
-    debugCamUp = camUp;
-    debugCamDir = camDir;
-    debugLookatPoint = lookatPoint;
+		// default the debug camera = main camera
+		debugCamPos = camPos;
+		debugCamUp = camUp;
+		debugCamDir = camDir;
+		debugLookatPoint = lookatPoint;
 
 		if (useDebugCamera) {
-      debugCamPos = defaultDebugPos;
+ 		    debugCamPos = defaultDebugPos;
 			debugCamDir = glm::normalize(camPos - debugCamPos); // look at the rendering camera
 			debugLookatPoint = debugCamPos + debugCamDir;
 		}
