@@ -18,7 +18,7 @@ void luaSetup(lua_State * L){
 	lua_register(L, "deleteModel", deleteModel);
 	lua_register(L, "addCollider", addCollider);
 	lua_register(L, "getCollisionsWithLayer", getCollisionsWithLayer);
-	lua_register(L, "getMouseClickWithLayer",getMouseClickWithLayer);
+	lua_register(L, "getMouseClickWithLayer", getMouseClickWithLayer);
 	lua_register(L, "getRayCollisionWithLayer",getRayCollisionWithLayer);
 	lua_register(L, "setModelColor", setModelColor);
 	lua_register(L, "rotateModel", rotateModel);
@@ -215,7 +215,7 @@ int addCollider(lua_State * L){
 	return 1;
 }
 
-int getMouseClickWithLayer(lua_State * L){
+int getMouseClickWithLayer(lua_State* L){
 	int layer;
 	int argc = lua_gettop(L);
 	layer = (int)lua_tonumber(L, 1);
@@ -241,7 +241,7 @@ int getRayCollisionWithLayer(lua_State * L){
 	x = lua_tonumber(L, 1);
 	y = lua_tonumber(L, 2);
 	z = lua_tonumber(L, 3);
-  dx = lua_tonumber(L, 4);
+  	dx = lua_tonumber(L, 4);
 	dy = lua_tonumber(L, 5);
 	dz = lua_tonumber(L, 6);
 	layer = (int)lua_tonumber(L, 7);
