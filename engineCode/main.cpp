@@ -364,7 +364,7 @@ int main(int argc, char *argv[]) {
 		if (saveOutput)
 			Win2PPM(screenWidth, screenHeight);
 
-		IMGuiNewFrame();
+		// IMGuiNewFrame();
 
 		//ImGui can do some pretty cool things, try some of these:
 		//ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
@@ -374,18 +374,18 @@ int main(int argc, char *argv[]) {
 		//static int counter = 0;
 		//if (ImGui::Button("Button")) counter++;
 
-		ImGui::Begin("Frame Info");
-		if (configType != "") ImGui::Text("Engine config: %s", configType.c_str());
-		ImGui::Text("Time for Rendering %.0f ms", drawTime);
-		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-		ImGui::Text("%d Objects in Scene Graph, %d being drawn", numModels, (int)curScene.toDraw.size());
-		ImGui::Text("Total Triangles: %d", totalTriangles);
-		ImGui::Text("Camera Pos %f %f %f", camPos.x, camPos.y, camPos.z);
-		ImGui::End();
+		// ImGui::Begin("Frame Info");
+		// if (configType != "") ImGui::Text("Engine config: %s", configType.c_str());
+		// ImGui::Text("Time for Rendering %.0f ms", drawTime);
+		// ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+		// ImGui::Text("%d Objects in Scene Graph, %d being drawn", numModels, (int)curScene.toDraw.size());
+		// ImGui::Text("Total Triangles: %d", totalTriangles);
+		// ImGui::Text("Camera Pos %f %f %f", camPos.x, camPos.y, camPos.z);
+		// ImGui::End();
 
 		// Render ImGui
-		ImGui::Render();
-		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+		// ImGui::Render();
+		// ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
 		//LOG_F(3,"Done Drawing");
 		swapDisplayBuffers();
