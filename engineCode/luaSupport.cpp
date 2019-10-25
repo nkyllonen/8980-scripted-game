@@ -206,9 +206,10 @@ int addCollider(lua_State * L){
 	tx = lua_tonumber(L, 4);
 	ty = lua_tonumber(L, 5);
 	tz = lua_tonumber(L, 6);
-	LOG_F(INFO,"Adding collider to model %d in layer %d  (offest %f, %f, %f) with radius %f",modelID,layer,tx,ty,tz,r);
 
 	int colliderID = addCollider(modelID,layer,r,glm::vec3(tx,ty,tz));
+
+	LOG_F(INFO,"Adding collider %d to model %d in layer %d  (offest %f, %f, %f) with radius %f",colliderID, modelID,layer,tx,ty,tz,r);
 
 	lua_pushnumber(L, colliderID);
 

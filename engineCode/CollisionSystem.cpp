@@ -14,7 +14,7 @@ int numColliders[MAX_LAYERS] = {0,0,0,0,0,0,0,0,0,0};
 int ID_counter = 0;
 
 int addCollider(int modelID, int layer, float r, vec3 offset){
-  //printf("Added Collider for Model %d to layer %d\n",modelID,layer);
+//   printf("Added Collider for Model %d to layer %d\n",modelID,layer);
   Collider c = Collider();
   c.offset = offset;
   c.r = r;
