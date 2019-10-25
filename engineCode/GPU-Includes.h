@@ -7,8 +7,8 @@
  #include <SDL2/SDL.h>
  #include <SDL2/SDL_opengl.h>
 #else
- #include <SDL.h>
- #include <SDL_opengl.h>
+ #include <C:\SDL2\include\SDL.h> 
+ #include <C:\SDL2\include\SDL_opengl.h>
 #endif
 
 #define GLM_FORCE_RADIANS

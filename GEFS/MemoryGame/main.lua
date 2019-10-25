@@ -25,6 +25,12 @@ flipVelocity = 4.0
 maxFlipTime = 2.0
 flippedUpTime = 0.0
 
+-- board state variables
+spacingY = 1.1 --Give a small space between grid cells to create boundries
+startingY = -.6
+startingZ = -1.8
+spacingZ = 1.2
+
 -- arrays containing world objects
 tiles = {}
 tileItems = {}
@@ -33,16 +39,11 @@ items = {"Tower", "Crystal", "Pug", "Sheep", "Ship", "Poplar", "Bottle", "Carrot
 -- array containing amount each tile has rotated in radians
 flipped = {}
 
--- fill tileItems, 2 at a time
-idx = 1
-for i = 1, boardSize*boardSize, 2 do
-  tileItems[i] = items[idx]
-  flipped[i] = 0
-
-  tileItems[i+1] = items[idx]
-  flipped[i+1] = 0
-  idx = idx + 1
-end
+--Tile variables
+gridLayer = 0
+-- gridModel = {}
+gridPos = {}
+curPos = {}
 
 function frameUpdate(dt)
   -- update flippedUpTime
@@ -82,6 +83,21 @@ function keyHandler(keys)
   end
 end
 
+-- Mouse handler
+function mouseHandler(mouse)
+  -- id = addModel("Teapot",0,0,0)
+  -- setModelMaterial(id,"Shiny Red Plastic")
+  if (mouse.left and not haveClicked) then
+    hitID, dist = getMouseClickWithLayer(gridLayer) --See which grid item we clicked on
+    -- print("hitID: "..hitID.." tileItem @ hitID: "..tileItems[hitID])
+    print("hitID: "..hitID)
+    haveClicked = true
+  end
+  if (not mouse.left) then
+    haveClicked = false
+  end
+end
+
 function flipUp(index)
   print("flipping up index " .. index)
   flipped[index] = 0.0001
@@ -101,18 +117,30 @@ function initializeBoard()
   shuffle(tileItems)
 
   -- fill tiles according to tileItems
-  local y = -0.8
-  local z = -1.8
-  for i = 1, boardSize*boardSize do
-    -- if past end of row, move up to next row
-    if z > 1.8 then
-      y = y + 1.2
-      z = -1.8
-    end
+  -- local y = -0.8
+  -- local z = -1.8
+  -- for i = 1, boardSize*boardSize do
+  --   -- if past end of row, move up to next row
+  --   if z > 1.8 then
+  --     y = y + 1.2
+  --     z = -1.8
+  --   end
 
-    tiles[i] = addModel(tileItems[i] .. "Tile", 0, y, z)
-    print(tileItems[i] .. " @ index " .. i)
-    z = z + 1.2
+  --   tiles[i] = addModel(tileItems[i] .. "Tile", 0, y, z)
+  --   print(tileItems[i] .. " @ index " .. i)
+  --   z = z + 1.2
+  -- end
+
+  --Create a 4x4 grid of tiles
+  idx = 1
+  for i = 0,3 do
+    for j = 0,3 do
+      pos = vec3(0, startingY + spacingY*i, startingZ + spacingZ*j)
+      tiles[idx] = addModel(tileItems[idx].."Tile", pos.x, pos.y, pos.z)
+      gridPos[tiles[idx]] = pos
+      addCollider(tiles[idx], gridLayer, 0.6, 0, 0, 0) --Grid cell needs a collider for click interaction
+      idx = idx + 1
+    end
   end
 end
 
@@ -126,4 +154,31 @@ function shuffle(tbl)
   return tbl
 end
 
+-- fill tileItems, 2 at a time
+idx = 1
+for i = 1, boardSize*boardSize, 2 do
+  tileItems[i] = items[idx]
+  flipped[i] = 0
+
+  tileItems[i+1] = items[idx]
+  flipped[i+1] = 0
+  idx = idx + 1
+end
+
 initializeBoard()
+
+--Create a 4x4 grid of tiles
+-- spacingY = 1.1 --Give a small space between grid cells to create boundries
+-- startingY = -.6
+-- startingZ = -1.8
+-- spacingZ = 1.2
+-- idx = 1
+-- for i = 0,3 do
+--   for j = 0,3 do
+--     gridModel[idx] = addModel("Tile",0,startingY + spacingY*i,startingZ + spacingZ*j)
+--     gridPos[gridModel[idx]] = vec3(0,startingY + spacingY*i,startingZ + spacingZ*j)
+--     addCollider(gridModel[idx],gridLayer,0.6,0,0,0) --Grid cell needs a collider for click interaction
+--     setModelMaterial(gridModel[idx],"Dark Polished Wood")
+--     idx = idx + 1
+--   end
+-- end
