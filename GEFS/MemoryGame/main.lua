@@ -32,8 +32,8 @@ startingZ = -1.8
 spacingZ = 1.2
 
 -- arrays containing world objects
-tiles = {}
-tileItems = {}
+tiles = {} -- array mapping index --> modelID
+tileItems = {} -- array mapping index --> item string
 items = {"Tower", "Crystal", "Pug", "Sheep", "Ship", "Poplar", "Bottle", "Carrot"}
 
 -- array containing amount each tile has rotated in radians
@@ -41,9 +41,9 @@ flipped = {}
 
 --Tile variables
 gridLayer = 0
--- gridModel = {}
-gridPos = {}
+gridPos = {} -- array mapping modelID --> position
 curPos = {}
+colliders = {}
 
 function frameUpdate(dt)
   -- update flippedUpTime
@@ -89,7 +89,6 @@ function mouseHandler(mouse)
   -- setModelMaterial(id,"Shiny Red Plastic")
   if (mouse.left and not haveClicked) then
     hitID, dist = getMouseClickWithLayer(gridLayer) --See which grid item we clicked on
-    -- print("hitID: "..hitID.." tileItem @ hitID: "..tileItems[hitID])
     print("hitID: "..hitID)
     haveClicked = true
   end
@@ -138,7 +137,7 @@ function initializeBoard()
       pos = vec3(0, startingY + spacingY*i, startingZ + spacingZ*j)
       tiles[idx] = addModel(tileItems[idx].."Tile", pos.x, pos.y, pos.z)
       gridPos[tiles[idx]] = pos
-      addCollider(tiles[idx], gridLayer, 0.6, 0, 0, 0) --Grid cell needs a collider for click interaction
+      colliders[tiles[idx]] = addCollider(tiles[idx], gridLayer, 0.6, 0, 0, 0) --Grid cell needs a collider for click interaction
       idx = idx + 1
     end
   end
