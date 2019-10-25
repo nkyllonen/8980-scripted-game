@@ -56,3 +56,43 @@ void keyboardUpdateLua(lua_State* L){
 		int luaErr = lua_pcall(L, 1, 0, 0);
 		CHECK_F(luaErr==0, "Error after call to lua function 'keyHandler': %s \n", lua_tostring(L, -1));
 }
+
+
+struct MouseState{
+	float x, y; //0-1
+  int px, py; //position in pixel
+	bool left, middle, right;
+};
+
+struct MouseState mouse;
+
+#include "WindowManager.h"
+void updateMouseState(){
+  SDL_GetMouseState(&mouse.px, &mouse.py);
+  mouse.left = SDL_GetMouseState(NULL, NULL) & SDL_BUTTON(SDL_BUTTON_LEFT);
+  mouse.middle = SDL_GetMouseState(NULL, NULL) & SDL_BUTTON(SDL_BUTTON_MIDDLE);
+  mouse.right = SDL_GetMouseState(NULL, NULL) & SDL_BUTTON(SDL_BUTTON_RIGHT);
+  mouse.x = mouse.px / (screenWidth  * 0.5f) - 1.0f;
+  mouse.y = mouse.py / (screenHeight * 0.5f) - 1.0f;
+}
+
+void mouseUpdateLua(lua_State* L){
+  //Call special keyHandler function in lua
+		//---------------
+		lua_getglobal(L, "mouseHandler");
+    if(!lua_isfunction(L,-1)){
+      lua_pop(L, 1);
+      return;
+    }
+		lua_newtable(L);
+		lua_pushinteger(L, mouse.px); lua_setfield(L, -2, "px");
+		lua_pushinteger(L, mouse.py); lua_setfield(L, -2, "py");
+    lua_pushnumber(L, mouse.x); lua_setfield(L, -2, "x");
+		lua_pushnumber(L, mouse.y); lua_setfield(L, -2, "y");
+		lua_pushboolean(L, mouse.right); lua_setfield(L, -2, "right");
+		lua_pushboolean(L, mouse.left); lua_setfield(L, -2, "left");
+		lua_pushboolean(L, mouse.middle); lua_setfield(L, -2, "middle");
+
+		int luaErr = lua_pcall(L, 1, 0, 0);
+		CHECK_F(luaErr==0, "Error after call to lua function 'mouseHandler': %s \n", lua_tostring(L, -1));
+}

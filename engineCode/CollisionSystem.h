@@ -20,6 +20,7 @@ struct Collider{
 int addCollider(int modelID, int layer, float r, glm::vec3 offset);
 int getCollision(Collider* collider, int layer);
 int getCollision(float x, float y, float z, float r, int layer);
+int getCollisionRay(glm::vec3 pos, glm::vec3 normalizedDir, float& maxDist_inOut, int layer);
 void updateColliderPositions();
 
 extern std::vector<int> collisionModels;

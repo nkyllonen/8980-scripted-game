@@ -6,7 +6,7 @@ CSCI 8980 - Real-time Game Engine Design, Assignment 3
 
 ## Building and Running Instructions
 ```
-# build Makefile using cmake
+# build Makefile using cmake (need to do this for every additional C++ files added)
 $ cmake ..
 
 # build engine

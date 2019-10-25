@@ -14,7 +14,7 @@ int numColliders[MAX_LAYERS] = {0,0,0,0,0,0,0,0,0,0};
 int ID_counter = 0;
 
 int addCollider(int modelID, int layer, float r, vec3 offset){
-  //printf("Added Collider for Model %d to layer %d\n",modelID,layer);
+//   printf("Added Collider for Model %d to layer %d\n",modelID,layer);
   Collider c = Collider();
   c.offset = offset;
   c.r = r;
@@ -38,6 +38,34 @@ void updateColliderPositions(){
     m->collider->globalPos = glm::vec3(pos[0],pos[1],pos[2])/pos[3];
     //printf("  is now at pos: %f %f %f\n",pos[0],pos[1],pos[2]);
   }
+}
+
+//dir must be normalized!
+int getCollisionRay(vec3 pos, vec3 dir, float& maxDist, int layer){
+  //printf("Checking for collisions at layer %d\n",layer);
+  int hitID = -1;
+
+  for (int i = 0; i < numColliders[layer]; i++){
+    vec3 fromObj = (pos-colliders[layer][i].globalPos);
+    float b = 2*glm::dot(dir,fromObj);
+    float c = glm::dot(fromObj,fromObj) - colliders[layer][i].r*colliders[layer][i].r;
+    float disc = b*b - 4*c;
+    //printf("pos: %f %f %f\n",colliders[layer][i].globalPos.x,colliders[layer][i].globalPos.y,colliders[layer][i].globalPos.z);
+    if (disc < 0) continue; //the ray misses this sphere
+    float t = (-b - sqrt(disc))/2; //@HW, why skip the + disc case?
+    //printf("t: %f\n",t);
+    if (t < 0) continue;
+    if (t < maxDist){
+      //printf("Dir: %f %f %f\n",dir.x,dir.y,dir.z);
+      vec3 hitPoint = pos+t*dir;
+      //printf("Hit pos: %f %f %f\n",hitPoint.x,hitPoint.y,hitPoint.z);
+      vec3 ctoh = hitPoint - colliders[layer][i].globalPos;
+      //printf("Offset: %f %f %f : %f\n",ctoh.x,ctoh.y,ctoh.z, sqrt(glm::dot(ctoh,ctoh)));
+      maxDist = t;
+      hitID = colliders[layer][i].modelID;
+    }
+  }
+  return hitID;
 }
 
 int getCollision(float x, float y, float z, float rad, int layer){
