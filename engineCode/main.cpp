@@ -65,7 +65,7 @@ void Win2PPM(int width, int height);
 
 AudioManager audioManager = AudioManager();
 
-// Camera globals //TODO: make these into Camera structs!
+// Camera globals -- using Camera extern variables now
 // vec3 camPos = vec3(0,0,0);
 // vec3 camDir = vec3(0,0,-1);
 // vec3 camUp = vec3(0,1,0);
@@ -319,10 +319,9 @@ int main(int argc, char *argv[]) {
 
 		//------ PASS 2 - Main (PBR) Shading Pass --------------------
 
-    	// build view matrix using debug camera
-		mat4 view = glm::lookAt(debugCamPos, debugLookatPoint, debugCamUp);
-    
-		mat4 proj = glm::perspective(FOV * 3.14f / 180, screenWidth / (float)screenHeight, .2f, 20.0f); //FOV, aspect, near, far
+    	// build view matrix using debug camera -- using Camera extern variables
+		view = glm::lookAt(debugCamPos, debugLookatPoint, debugCamUp);
+		proj = glm::perspective(FOV * 3.14f / 180, screenWidth / (float)screenHeight, .2f, 20.0f); //FOV, aspect, near, far
 		//view = lightViewMatrix; proj = lightProjectionMatrix;  //This was useful to visualize the shadowmap
 
 		setPBRShaderUniforms(view, proj, lightViewMatrix, lightProjectionMatrix, useShadowMap);
