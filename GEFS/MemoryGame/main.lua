@@ -24,6 +24,8 @@ boardSize = 4
 flipVelocity = 4.0
 maxFlipTime = 2.0
 flippedUpTime = 0.0
+firstFlipped = nil
+secondFlipped = nil
 
 -- board state variables
 spacingY = 1.1 --Give a small space between grid cells to create boundries
@@ -51,13 +53,24 @@ function frameUpdate(dt)
     flippedUpTime = flippedUpTime + dt
   end
 
+  -- check for match
+  if firstFlipped and secondFlipped then
+    -- print(tileItems[firstFlipped].." matches "..tileItems[secondFlipped].."?")
+    if tileItems[firstFlipped] == tileItems[secondFlipped] then
+      print("MATCH!!")
+    end
+  end
+
   if flippedUpTime > maxFlipTime then
     -- time is up
     print("time is up!")
     flippedUpTime = 0.0
-    for i = 1, boardSize*boardSize do
-      flipDown(i)
-    end
+
+    -- reset
+    flipDown(firstFlipped)
+    flipDown(secondFlipped)
+    firstFlipped = nil
+    secondFlipped = nil
   else
     -- flip non-zero models
     for idx, val in pairs(flipped) do
@@ -89,8 +102,10 @@ function mouseHandler(mouse)
     hitID, dist = getMouseClickWithLayer(gridLayer) --See which grid item we clicked on
     print("hitID: "..hitID)
 
-    -- rotate that tile
-    flipUp(modelIndices[hitID])
+    -- rotate that tile if it was valid
+    if (hitID > -1) then
+      flipUp(modelIndices[hitID])
+    end
 
     haveClicked = true
   end
@@ -100,14 +115,24 @@ function mouseHandler(mouse)
 end
 
 function flipUp(index)
-  print("flipping up index " .. index)
-  flipped[index] = 0.0001
-  flippedUpTime = 0.0001
+  if secondFlipped == nil then
+    print("flipping up index " .. index)
+    flipped[index] = 0.0001
+    flippedUpTime = 0.0001
+
+    -- keep track of which indices were flipped
+    if firstFlipped == nil then
+      firstFlipped = index
+    else
+      secondFlipped = index
+    end
+
+  end
 end
 
 function flipDown(index)
   -- if flipped up
-  if flipped[index] > 0 then
+  if not (index == nil) and flipped[index] > 0 then
     print("flipping down index " .. index)
     flipped[index] = -0.0001
   end
