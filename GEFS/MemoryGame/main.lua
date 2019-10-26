@@ -57,13 +57,13 @@ function frameUpdate(dt)
   if firstFlipped and secondFlipped then
     -- print(tileItems[firstFlipped].." matches "..tileItems[secondFlipped].."?")
     if tileItems[firstFlipped] == tileItems[secondFlipped] then
-      print("MATCH!!")
+      -- print("MATCH!!")
     end
   end
 
   if flippedUpTime > maxFlipTime then
     -- time is up
-    print("time is up!")
+    -- print("time is up!")
     flippedUpTime = 0.0
 
     -- reset
@@ -100,7 +100,7 @@ function mouseHandler(mouse)
   if (mouse.left and not haveClicked) then
     --See which grid item we clicked on
     hitID, dist = getMouseClickWithLayer(gridLayer)
-    print("hitID: "..hitID)
+    -- print("hitID: "..hitID)
 
     -- rotate that tile if it was valid
     if (hitID > -1) then
@@ -122,7 +122,7 @@ function flipUp(index)
 
   -- only flip 2 tiles
   if secondFlipped == nil then
-    print("flipping up index " .. index)
+    -- print("flipping up index " .. index)
     flipped[index] = 0.0001
     flippedUpTime = 0.0001
 
@@ -139,7 +139,7 @@ end
 function flipDown(index)
   -- if flipped up
   if not (index == nil) and flipped[index] > 0 then
-    print("flipping down index " .. index)
+    -- print("flipping down index " .. index)
     flipped[index] = -0.0001
   end
 end
