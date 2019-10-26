@@ -61,7 +61,7 @@ _show a targeted video highlighting the use of animation. Explain why you chose 
 
 #### Rotating tiles by clicking
 
-[![rotation on tile click](images/rotate-on-click.gif)](https://drive.google.com/file/d/1VmDnugBzUmzohaOUJID3_5jrK3Es1-q2/view?usp=sharing)
+[![rotation on tile click](images/rotate-on-click2.gif)](https://drive.google.com/file/d/1VmDnugBzUmzohaOUJID3_5jrK3Es1-q2/view?usp=sharing)
 
 1. From a design perspective, why did we choose a click-based rotation?
 
@@ -70,16 +70,20 @@ _show a targeted video highlighting the use of animation. Explain why you chose 
 2. From a technical perspective, how did we implement a click-based rotation?
 
     The rotation is done by keeping track of the amounts that each tile is currently rotated. These values are stored as radian values within the `flipped` array:
-        * 0 : this tile is not rotating at all (therefore must be either flipped up or down)
-        * < 0 : this tile is in the middle of flipping down
-        * > 0 : this tile is in the middle of flipping up
+    
+     ```
+        0 : this tile is not rotating at all (therefore must be either flipped up or down)
+        < 0 : this tile is in the middle of flipping down
+        > 0 : this tile is in the middle of flipping up
+    ```
+    
     Each frame, these values are monitored and the tiles with non-zero values are further rotated in their respective directions by calling `rotateModel` and updating their radian value within `flipped`.
 
     The clicking is done by creating a layer of colliders on top of each tile. These colliders are placed when the board is originally generated and are monitored within our `mouseHandler` which is called whenever a mouse event occurs. If a left click has been registered, `mouseHandler` calls `getMouseClickWithLayer` to determine the collider which was clicked and to return the id of the model corresponding to that collider.
     
     With this model id, if it is a valid time to rotate a tile (no tiles are flipped or only one other tile is flipped), then that model's radian value within `flipped` is set to a very small positive number. This small positive number will, in essence, notify `frameUpdate` that this tile is now in the process of flipping up.
 
-#### <Some disappearing card animation here>
+#### Some disappearing card animation here
 
 <!-- [![some gif here...](images/...)](google drive link...) -->
 
