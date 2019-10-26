@@ -90,7 +90,6 @@ end
 function keyHandler(keys)
   -- if keys.up then
   --   -- flip up random tile
-  --   -- TODO: flip on mouse clicks instead
   --   r = math.random(#tileItems)
   --   flipUp(r)
   -- end
@@ -99,7 +98,8 @@ end
 -- Mouse handler
 function mouseHandler(mouse)
   if (mouse.left and not haveClicked) then
-    hitID, dist = getMouseClickWithLayer(gridLayer) --See which grid item we clicked on
+    --See which grid item we clicked on
+    hitID, dist = getMouseClickWithLayer(gridLayer)
     print("hitID: "..hitID)
 
     -- rotate that tile if it was valid
@@ -115,6 +115,12 @@ function mouseHandler(mouse)
 end
 
 function flipUp(index)
+  -- disallow flipping a rotating tile or flipping first tile
+  if not (flipped[index] == 0) and (firstFlipped == index) then
+    return
+  end
+
+  -- only flip 2 tiles
   if secondFlipped == nil then
     print("flipping up index " .. index)
     flipped[index] = 0.0001
