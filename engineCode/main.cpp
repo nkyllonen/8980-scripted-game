@@ -47,6 +47,8 @@ const string sceneFile = "Scene.txt";
 bool useBloom = false;
 bool useShadowMap = true;
 bool drawColliders = false;
+bool showStats = true;
+bool showSplash = false;
 
 int targetFrameRate = 30;
 float secondsPerFrame = 1.0f / (float)targetFrameRate;
@@ -54,6 +56,8 @@ float nearPlane = 0.5;
 float farPlane = 10;
 bool useDebugCamera = false;
 vec3 defaultDebugPos = vec3(10,10,10);
+
+string splashMessage = "";
 
 int targetScreenWidth = 1120;
 int targetScreenHeight = 700;
@@ -126,7 +130,7 @@ int main(int argc, char *argv[]) {
 
 	createOpenGLWindow(targetScreenWidth, targetScreenHeight, fullscreen);
 
-	//Initalize various buffers on the GPU
+	//Initialize various buffers on the GPU
 	initIMGui();
 	loadTexturesToGPU();
 	initHDRBuffers();
@@ -154,6 +158,12 @@ int main(int argc, char *argv[]) {
 	CHECK_F(luaErr == 0, "Error loading Lua: %s ", lua_tostring(L, -1));
 
 	LOG_F(INFO, "Script Loaded without Error.");
+
+	// load in splash screen message if we want one
+	if (showSplash) {
+		splashMessage = getSplashMessageFromLua(L);
+		// LOG_F(INFO, "Loading in splash screen message: '%s'", splashMessage.c_str());
+	}
 
 	int timeSpeed = 1; //Modifies timestep rate given to Lua
 
@@ -364,8 +374,64 @@ int main(int argc, char *argv[]) {
 		if (saveOutput)
 			Win2PPM(screenWidth, screenHeight);
 
-		// IMGuiNewFrame();
+		if (showStats) {
+			IMGuiNewFrame();
 
+			ImGui::Begin("Frame Info");
+			if (configType != "") {
+				ImGui::Text("Engine config: %s", configType.c_str());
+			}
+			ImGui::Text("Time for Rendering %.0f ms", drawTime);
+			ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+			ImGui::Text("%d Objects in Scene Graph, %d being drawn", numModels, (int)curScene.toDraw.size());
+			ImGui::Text("Total Triangles: %d", totalTriangles);
+			ImGui::Text("Camera Pos %f %f %f", camPos.x, camPos.y, camPos.z);
+			ImGui::End();
+
+			// Render ImGui
+			ImGui::Render();
+			ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+		}
+
+		if (showSplash) {
+			IMGuiNewFrame();
+
+			// inspired by ImGui simple overlay example:
+			// https://github.com/ocornut/imgui/blob/master/imgui_demo.cpp#L4324
+			bool* p_open;
+			bool b = true;
+			p_open = &b;
+			const float DISTANCE = 10.0f; // padding from edge of window
+
+			ImGuiIO& io = ImGui::GetIO();
+			ImVec2 pos = ImVec2(DISTANCE, DISTANCE);
+			ImVec2 pivot = ImVec2(0.0f, 0.0f);
+			ImGui::SetNextWindowPos(pos, ImGuiCond_Always, pivot);
+			
+			// ImFont* font = io.Fonts->AddFontDefault();
+			// font->FontSize = 20;
+			// io.Fonts->Build();
+
+			static int corner = 0;
+
+			ImGui::SetNextWindowBgAlpha(0.35f); // Transparent background
+			if (ImGui::Begin("Splash Screen", p_open, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav))
+			{
+				// ImGui::Text("%s", splashMessage.c_str());
+				int firstLine = splashMessage.find("\n");
+				string title = splashMessage.substr(0, firstLine);
+				ImGui::TextColored(ImVec4(1,1,0,1), "%s", title.c_str());
+				ImGui::Separator();
+				string info = splashMessage.substr(firstLine);
+				ImGui::Text("%s", info.c_str());
+			}
+			ImGui::End();
+
+			// // Render ImGui
+			ImGui::Render();
+			ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+		}
+		
 		//ImGui can do some pretty cool things, try some of these:
 		//ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 		//ImGui::ColorEdit3("clear color", (float*)&clear_color);
@@ -373,19 +439,6 @@ int main(int argc, char *argv[]) {
 		//ImGui::SliderFloat("float", &f, 0.0f, 1.0f);
 		//static int counter = 0;
 		//if (ImGui::Button("Button")) counter++;
-
-		// ImGui::Begin("Frame Info");
-		// if (configType != "") ImGui::Text("Engine config: %s", configType.c_str());
-		// ImGui::Text("Time for Rendering %.0f ms", drawTime);
-		// ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-		// ImGui::Text("%d Objects in Scene Graph, %d being drawn", numModels, (int)curScene.toDraw.size());
-		// ImGui::Text("Total Triangles: %d", totalTriangles);
-		// ImGui::Text("Camera Pos %f %f %f", camPos.x, camPos.y, camPos.z);
-		// ImGui::End();
-
-		// Render ImGui
-		// ImGui::Render();
-		// ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
 		//LOG_F(3,"Done Drawing");
 		swapDisplayBuffers();
@@ -537,6 +590,18 @@ void configEngine(string configFile, string configName) {
 			sscanf(rawline, "debugCamPos = %f %f %f", &pos.x, &pos.y, &pos.z);
 			defaultDebugPos = pos;
 			LOG_F(1, "Debug camera position: %f , %f , %f", pos.x, pos.y, pos.z);
+		}
+		if (commandStr == "showStats") {
+			int val;
+			sscanf(rawline, "showStats = %d", &val);
+			(val == 0) ? showStats = false : showStats = true;
+			(showStats) ? LOG_F(INFO, "Statistics being displayed on screen") : LOG_F(INFO, "Not showing statistics to screen");
+		}
+		if (commandStr == "showSplash") {
+			int val;
+			sscanf(rawline, "showSplash = %d", &val);
+			(val == 0) ? showSplash = false : showSplash = true;
+			(showSplash) ? LOG_F(INFO, "Will display splash screen") : LOG_F(INFO, "Will not display splash screen");
 		}
 	}
 }

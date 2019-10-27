@@ -74,6 +74,16 @@ glm::vec3 getCameraUpFromLua(lua_State * L){
 	return cameraUp;
 }
 
+//--------------- Splash Screen --------------------
+std::string getSplashMessageFromLua(lua_State* L) {
+	std::string s;
+	int argc = lua_gettop(L);
+	lua_getglobal(L, "splashMessage");
+	s = std::string(lua_tostring(L, 1));
+	LOG_F(INFO, "Loaded splash message: '%s'", s.c_str());
+	lua_pop(L, 1);
+	return s;
+}
 
 //------------------- Audio ------------------------
 
