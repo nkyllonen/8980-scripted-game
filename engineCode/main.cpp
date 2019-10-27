@@ -48,6 +48,7 @@ bool useBloom = false;
 bool useShadowMap = true;
 bool drawColliders = false;
 bool showStats = true;
+bool showSplash = false;
 
 int targetFrameRate = 30;
 float secondsPerFrame = 1.0f / (float)targetFrameRate;
@@ -55,6 +56,8 @@ float nearPlane = 0.5;
 float farPlane = 10;
 bool useDebugCamera = false;
 vec3 defaultDebugPos = vec3(10,10,10);
+
+string splashMessage = "";
 
 int targetScreenWidth = 1120;
 int targetScreenHeight = 700;
@@ -127,7 +130,7 @@ int main(int argc, char *argv[]) {
 
 	createOpenGLWindow(targetScreenWidth, targetScreenHeight, fullscreen);
 
-	//Initalize various buffers on the GPU
+	//Initialize various buffers on the GPU
 	initIMGui();
 	loadTexturesToGPU();
 	initHDRBuffers();
@@ -155,6 +158,17 @@ int main(int argc, char *argv[]) {
 	CHECK_F(luaErr == 0, "Error loading Lua: %s ", lua_tostring(L, -1));
 
 	LOG_F(INFO, "Script Loaded without Error.");
+
+	// load in splash screen message if we want one
+	if (showSplash) {
+		splashMessage = getSplashMessageFromLua(L);
+
+		if (splashMessage == "Hello this is a splash screen message") {
+			printf("SUCCESS!\n");
+		}
+
+		LOG_F(INFO, "Loading in splash screen message: '%s'", splashMessage);
+	}
 
 	int timeSpeed = 1; //Modifies timestep rate given to Lua
 
@@ -548,6 +562,12 @@ void configEngine(string configFile, string configName) {
 			sscanf(rawline, "showStats = %d", &val);
 			(val == 0) ? showStats = false : showStats = true;
 			(showStats) ? LOG_F(INFO, "Statistics being displayed on screen") : LOG_F(INFO, "Not showing statistics to screen");
+		}
+		if (commandStr == "showSplash") {
+			int val;
+			sscanf(rawline, "showSplash = %d", &val);
+			(val == 0) ? showSplash = false : showSplash = true;
+			(showSplash) ? LOG_F(INFO, "Will display splash screen") : LOG_F(INFO, "Will not display splash screen");
 		}
 	}
 }

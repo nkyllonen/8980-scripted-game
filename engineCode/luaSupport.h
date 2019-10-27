@@ -46,6 +46,8 @@ glm::vec3 getCameraPosFromLua(lua_State * L);
 glm::vec3 getCameraDirFromLua(lua_State * L);
 glm::vec3 getCameraUpFromLua(lua_State * L);
 
+#include <string>
+std::string getSplashMessageFromLua(lua_State* L);
 
 //Collision System
 int addCollider(lua_State * L);

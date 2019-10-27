@@ -3,6 +3,8 @@ print("Starting Lua for Memory Game")
 require "CommonLibs/vec3"
 math.randomseed(os.time())
 
+splashMessage = "Hello this is a splash screen message"
+
 CameraPosX = -6.0
 CameraPosY = 1.0
 CameraPosZ = 0.0
