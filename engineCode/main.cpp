@@ -47,6 +47,7 @@ const string sceneFile = "Scene.txt";
 bool useBloom = false;
 bool useShadowMap = true;
 bool drawColliders = false;
+bool showStats = true;
 
 int targetFrameRate = 30;
 float secondsPerFrame = 1.0f / (float)targetFrameRate;
@@ -364,8 +365,25 @@ int main(int argc, char *argv[]) {
 		if (saveOutput)
 			Win2PPM(screenWidth, screenHeight);
 
-		// IMGuiNewFrame();
+		if (showStats) {
+			IMGuiNewFrame();
 
+			ImGui::Begin("Frame Info");
+			if (configType != "") {
+				ImGui::Text("Engine config: %s", configType.c_str());
+			}
+			ImGui::Text("Time for Rendering %.0f ms", drawTime);
+			ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+			ImGui::Text("%d Objects in Scene Graph, %d being drawn", numModels, (int)curScene.toDraw.size());
+			ImGui::Text("Total Triangles: %d", totalTriangles);
+			ImGui::Text("Camera Pos %f %f %f", camPos.x, camPos.y, camPos.z);
+			ImGui::End();
+
+			// Render ImGui
+			ImGui::Render();
+			ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+		}
+		
 		//ImGui can do some pretty cool things, try some of these:
 		//ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 		//ImGui::ColorEdit3("clear color", (float*)&clear_color);
@@ -373,19 +391,6 @@ int main(int argc, char *argv[]) {
 		//ImGui::SliderFloat("float", &f, 0.0f, 1.0f);
 		//static int counter = 0;
 		//if (ImGui::Button("Button")) counter++;
-
-		// ImGui::Begin("Frame Info");
-		// if (configType != "") ImGui::Text("Engine config: %s", configType.c_str());
-		// ImGui::Text("Time for Rendering %.0f ms", drawTime);
-		// ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-		// ImGui::Text("%d Objects in Scene Graph, %d being drawn", numModels, (int)curScene.toDraw.size());
-		// ImGui::Text("Total Triangles: %d", totalTriangles);
-		// ImGui::Text("Camera Pos %f %f %f", camPos.x, camPos.y, camPos.z);
-		// ImGui::End();
-
-		// Render ImGui
-		// ImGui::Render();
-		// ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
 		//LOG_F(3,"Done Drawing");
 		swapDisplayBuffers();
@@ -537,6 +542,12 @@ void configEngine(string configFile, string configName) {
 			sscanf(rawline, "debugCamPos = %f %f %f", &pos.x, &pos.y, &pos.z);
 			defaultDebugPos = pos;
 			LOG_F(1, "Debug camera position: %f , %f , %f", pos.x, pos.y, pos.z);
+		}
+		if (commandStr == "showStats") {
+			int val;
+			sscanf(rawline, "showStats = %d", &val);
+			(val == 0) ? showStats = false : showStats = true;
+			(showStats) ? LOG_F(INFO, "Statistics being displayed on screen") : LOG_F(INFO, "Not showing statistics to screen");
 		}
 	}
 }
