@@ -3,7 +3,11 @@ print("Starting Lua for Memory Game")
 require "CommonLibs/vec3"
 math.randomseed(os.time())
 
-splashMessage = "Hello this is a splash screen message"
+splashMessage = [[Welcome to Memory Tiles!
+Behind each of the tiles are
+8 pairs of items, randomly
+scrambled and waiting for
+you to find!]]
 
 CameraPosX = -6.0
 CameraPosY = 1.0
