@@ -51,9 +51,17 @@ flipped = {}
 --Tile variables
 gridLayer = 0
 curPos = {}
+curScale = {}
 colliders = {}
 
+--Variables used for shrinking
+animatedModels = {}
+speed = 1
+
 function frameUpdate(dt)
+
+  shrinking(dt)
+
   -- update flippedUpTime
   if flippedUpTime > 0 then
     flippedUpTime = flippedUpTime + dt
@@ -61,9 +69,11 @@ function frameUpdate(dt)
 
   -- check for match
   if firstFlipped and secondFlipped then
-    -- print(tileItems[firstFlipped].." matches "..tileItems[secondFlipped].."?")
     if tileItems[firstFlipped] == tileItems[secondFlipped] then
-      -- print("MATCH!!")
+      print("MATCH!!")
+      animatedModels[tiles[firstFlipped]] = true
+      animatedModels[tiles[secondFlipped]] = true
+
     end
   end
 
@@ -93,6 +103,28 @@ function frameUpdate(dt)
   end
 end
 
+function shrinking(dt)
+
+  --Shrink the tiles if there's a match i.e. when the models are in animated models
+  for m,_ in pairs(animatedModels) do
+    print("Shrinking")
+    if animatedModels[m] then
+      print("What is curScale[m]"..curScale[m])
+      curScale[m] = curScale[m] + speed*dt
+      print(m,_,curScale[m])
+      if (curScale[m] > 1) then
+        curScale[m] = 1
+        animatedModels[m] = false
+      end
+
+      resetModelTransform(m)
+      placeModel(m, curPos[m].x, curPos[m].y, curPos[m].z)
+      scaleModel(m, curScale[m], curScale[m], curScale[m])
+    end
+  end
+
+end
+
 function keyHandler(keys)
   -- if keys.up then
   --   -- flip up random tile
@@ -106,7 +138,8 @@ function mouseHandler(mouse)
   if (mouse.left and not haveClicked) then
     --See which grid item we clicked on
     hitID, dist = getMouseClickWithLayer(gridLayer)
-    -- print("hitID: "..hitID)
+    print("hitID: "..hitID)
+    
 
     -- rotate that tile if it was valid
     if (hitID > -1) then
@@ -156,7 +189,7 @@ function initializeBoard()
 
   -- Create a 4x4 grid of tiles
   -- fill tiles according to tileItems
-  idx = 1
+  local idx = 1
   for i = 0,3 do
     for j = 0,3 do
       pos = vec3(0, startingY + spacingY*i, startingZ + spacingZ*j)
@@ -164,6 +197,8 @@ function initializeBoard()
       modelIndices[tiles[idx]] = idx
       --Grid cell needs a collider for click interaction
       colliders[tiles[idx]] = addCollider(tiles[idx], gridLayer, 0.6, 0, 0, 0)
+      curScale[tiles[idx]] = 1
+      curPos[tiles[idx]] = vec3(pos.x,pos.y,pos.z)
       idx = idx + 1
     end
   end
