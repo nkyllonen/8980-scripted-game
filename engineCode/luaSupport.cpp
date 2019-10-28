@@ -472,6 +472,18 @@ int placeModel(lua_State * L){
 	return 0;
 }
 
+int resetModelTransform(lua_State * L){
+	int modelID = -1;
+	float tx, ty, tz;
+	int argc = lua_gettop(L);
+	modelID = lua_tonumber(L, 1);
+	LOG_F(1,"Resetting model %s to the identity transform.",models[modelID].name.c_str());
+
+	models[modelID].transform = glm::mat4();
+
+	return 0;
+}
+
 //Give a position and rotation
 int placeModelAtAngle(lua_State * L){
 	int modelID = -1;

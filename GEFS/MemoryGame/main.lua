@@ -110,14 +110,14 @@ function shrinking(dt)
     print("Shrinking")
     if animatedModels[m] then
       print("What is curScale[m]"..curScale[m])
-      curScale[m] = curScale[m] + speed*dt
+      curScale[m] = curScale[m] - speed*dt
       print(m,_,curScale[m])
       if (curScale[m] > 1) then
         curScale[m] = 1
         animatedModels[m] = false
       end
 
-      resetModelTransform(m)
+      --resetModelTransform(m)
       placeModel(m, curPos[m].x, curPos[m].y, curPos[m].z)
       scaleModel(m, curScale[m], curScale[m], curScale[m])
     end

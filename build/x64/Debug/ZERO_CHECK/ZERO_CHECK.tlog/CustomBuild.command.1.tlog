@@ -1,0 +1,10 @@
+^C:\USERS\OWNER\DOCUMENTS\COLLEGE\GRADSCHOOL\GAME ENGINE\HW3\8980-SCRIPTED-GAME\BUILD\CMAKEFILES\FD0578FCC37D06CCB3B2107C2C029C94\GENERATE.STAMP.RULE
+setlocal
+"C:\Program Files\cmake-3.15.3-win64-x64\cmake-3.15.3-win64-x64\bin\cmake.exe" "-SC:/Users/Owner/Documents/COLLEGE/GradSchool/Game engine/HW3/8980-scripted-game" "-BC:/Users/Owner/Documents/COLLEGE/GradSchool/Game engine/HW3/8980-scripted-game/build" --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file "C:/Users/Owner/Documents/COLLEGE/GradSchool/Game engine/HW3/8980-scripted-game/build/Game_Engine.sln"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

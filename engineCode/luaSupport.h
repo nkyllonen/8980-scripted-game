@@ -36,6 +36,7 @@ int setModelColor(lua_State * L);
 
 int placeModel(lua_State * L);
 int placeModelAtAngle(lua_State * L);
+int resetModelTransform(lua_State * L);
 int translateModel(lua_State * L);
 int rotateModel(lua_State * L);
 int resetTransformation(lua_State * L);
