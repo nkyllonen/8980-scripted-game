@@ -60,7 +60,7 @@ speed = 1
 
 function frameUpdate(dt)
 
-  shrinking(dt)
+  
 
   -- update flippedUpTime
   if flippedUpTime > 0 then
@@ -101,9 +101,13 @@ function frameUpdate(dt)
       end
     end
   end
+
+  shrinking(dt)
 end
 
 function shrinking(dt)
+
+  --TODO: Could put end condition in here by checking length of animated models
 
   --Shrink the tiles if there's a match i.e. when the models are in animated models
   for m,_ in pairs(animatedModels) do
@@ -112,8 +116,8 @@ function shrinking(dt)
       print("What is curScale[m]"..curScale[m])
       curScale[m] = curScale[m] - speed*dt
       print(m,_,curScale[m])
-      if (curScale[m] > 1) then
-        curScale[m] = 1
+      if (curScale[m] < .1) then
+        curScale[m] = 0
         animatedModels[m] = false
       end
 
