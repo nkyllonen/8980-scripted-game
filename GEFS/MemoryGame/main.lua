@@ -32,6 +32,8 @@ maxFlipTime = 2.0
 flippedUpTime = 0.0
 firstFlipped = nil
 secondFlipped = nil
+shrink = false
+match = false
 
 -- board state variables
 spacingY = 1.1 --Give a small space between grid cells to create boundries
@@ -60,58 +62,64 @@ speed = 1
 
 function frameUpdate(dt)
 
-  
+  if (shrink and match) then
+    shrinking(dt)
 
-  -- update flippedUpTime
-  if flippedUpTime > 0 then
-    flippedUpTime = flippedUpTime + dt
-  end
-
-  -- check for match
-  if firstFlipped and secondFlipped then
-    if tileItems[firstFlipped] == tileItems[secondFlipped] then
-      print("MATCH!!")
-      animatedModels[tiles[firstFlipped]] = true
-      animatedModels[tiles[secondFlipped]] = true
-
-    end
-  end
-
-  if flippedUpTime > maxFlipTime then
-    -- time is up
-    -- print("time is up!")
-    flippedUpTime = 0.0
-
-    -- reset
-    flipDown(firstFlipped)
-    flipDown(secondFlipped)
-    firstFlipped = nil
-    secondFlipped = nil
   else
-    -- flip non-zero models
-    for idx, val in pairs(flipped) do
-      if (val > 0) and (val < 3.14) then
-        -- positive means flipping up
-        rotateModel(tiles[idx], flipVelocity*dt, 0 , 1, 0)
-        flipped[idx] = flipped[idx] + flipVelocity*dt
-      elseif (val < 0) and (val > -3.14) then
-        -- negative means flipping down
-        rotateModel(tiles[idx], -1.0*flipVelocity*dt, 0 , 1, 0)
-        flipped[idx] = flipped[idx] - flipVelocity*dt
+    -- update flippedUpTime
+    if flippedUpTime > 0 then
+      flippedUpTime = flippedUpTime + dt
+    end
+
+    -- check for match
+    if firstFlipped and secondFlipped then
+      if tileItems[firstFlipped] == tileItems[secondFlipped] then
+        print("MATCH!!")
+        animatedModels[tiles[firstFlipped]] = true
+        animatedModels[tiles[secondFlipped]] = true
+        match = true
+        
+      end
+    end
+
+    if flippedUpTime > maxFlipTime then
+      -- time is up
+      -- print("time is up!")
+      flippedUpTime = 0.0
+
+      if not match then
+        -- reset
+        flipDown(firstFlipped)
+        flipDown(secondFlipped)
+      end
+      firstFlipped = nil
+      secondFlipped = nil
+      shrink = true
+    else
+      -- flip non-zero models
+      for idx, val in pairs(flipped) do
+        if (val > 0) and (val < 3.14) then
+          -- positive means flipping up
+          rotateModel(tiles[idx], flipVelocity*dt, 0 , 1, 0)
+          flipped[idx] = flipped[idx] + flipVelocity*dt
+        elseif (val < 0) and (val > -3.14) then
+          -- negative means flipping down
+          rotateModel(tiles[idx], -1.0*flipVelocity*dt, 0 , 1, 0)
+          flipped[idx] = flipped[idx] - flipVelocity*dt
+        end
       end
     end
   end
+  
 
-  shrinking(dt)
 end
 
 function shrinking(dt)
 
   --TODO: Could put end condition in here by checking length of animated models
-
+  
   --Shrink the tiles if there's a match i.e. when the models are in animated models
   for m,_ in pairs(animatedModels) do
-    print("Shrinking")
     if animatedModels[m] then
       print("What is curScale[m]"..curScale[m])
       curScale[m] = curScale[m] - speed*dt
@@ -119,6 +127,8 @@ function shrinking(dt)
       if (curScale[m] < .1) then
         curScale[m] = 0
         animatedModels[m] = false
+        shrink = false
+        match = false
       end
 
       --resetModelTransform(m)
@@ -126,6 +136,7 @@ function shrinking(dt)
       scaleModel(m, curScale[m], curScale[m], curScale[m])
     end
   end
+
 
 end
 
