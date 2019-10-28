@@ -96,7 +96,7 @@ function frameUpdate(dt)
       
     end
     firstFlipped = nil
-    econdFlipped = nil
+    secondFlipped = nil
   else
     -- flip non-zero models
     for idx, val in pairs(flipped) do
