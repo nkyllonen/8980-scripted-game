@@ -89,7 +89,7 @@ _show a targeted video highlighting the use of animation. Explain why you chose 
 
 1. From a design perspective, why did we choose to shrink the tiles?
 
-We choose to shrink the tiles because it was the most clear animation to indicate that a match was found, and that those two tiles no longer need to be considered for the rest of the gameplay. 
+    We choose to shrink the tiles because it was the most clear animation to indicate that a match was found, and that those two tiles no longer need to be considered for the rest of the gameplay. 
 
 2. From a technical perspective, how did we implement shrinking the tiles?
 
@@ -102,10 +102,26 @@ We choose to shrink the tiles because it was the most clear animation to indicat
 _~2 page report that explains your overall game from both a design and technical perspective. From the design side, consider the following questions as a starting point:_
 
 1. Why did you choose the game?
+
+    We choose the memory tile game because it's a fun, easy game that could incorporate many objects and simple animations. We also felt like it would be fairly straight forward to get an initial iteration working and then add more complicated features if time permitted. It's also a game that can be played very quickly which works well for the purpose of this project.  
+
 2. What is the win condition?
+
+    The win condition is met when all the tiles have been matched, and therefore have disappeared from the screen. 
+
 3. How faithful is your implementation to physical/commercial versions of the game?
+
+    For physical versions of the game, you would simply remove the cards from the grid once a match has been found, so our shrinking animation is a more exciting addition to this process. Once both cards have been flipped, they stay turned over for 2 seconds and then they automatically flip back over. Since our version of this game limits the amount of time that the cards are flipped up, it is more challenging to remember the locations of each object. Our implementation also requires that the player choose a second tile within 2 seconds or the first tile will flip back over. If you were playing the physical version, the player is in control of when they decide to flip the cards back over. 
+
 4. What are areas of the biggest differences?
+
+    The biggest differences to the physical version are the time available to view the objects and the animation for when a match is found, as described above.
+    
+    Online versions of the memory tile game are often done in 2D, so they just display an image of the object where we did our flipping animation to reveal the object. They also simply display a blank card after you have found a match, which is obviously different from our shrinking animation. 
+
 5. What elements make playing your version better/worse than a physical experience?
+
+    Instead of having to reshuffle the deck each time when you want to play again with a physical playing cards, our version automatically shuffles all the objects behind the tiles so you can restart and play again very quickly. Our game also makes it impossible to cheat by looking at too many cards, because only two cards can be flipped over at a time. In addition, our version of memory titles is more challenging due to the time constraints that a player has to view a tile. However, by limiting the time that a player has to view a tile, we don't require them to click the tiles again to turn them back over which allows for smoother gameplay.
 
 ### Using GEFS to build the game
 
@@ -116,3 +132,5 @@ Mouse code
 
 3. What were the hardest parts of the assignment from a technical perspective?
 4. From a technical implementation perspective, how would you extend your final submission if you had 2-3 more weeks to work on it?
+
+We would likely animate a more interesting end game sequence.
