@@ -83,14 +83,19 @@ _show a targeted video highlighting the use of animation. Explain why you chose 
     
     With this model id, if it is a valid time to rotate a tile (no tiles are flipped or only one other tile is flipped), then that model's radian value within `flipped` is set to a very small positive number. This small positive number will, in essence, notify `frameUpdate` that this tile is now in the process of flipping up.
 
-#### Some disappearing card animation here
+#### Shrinking the tiles until they disappear
 
 <!-- [![some gif here...](images/...)](google drive link...) -->
 
-1. From a design perspective, why did we choose a _____?
+1. From a design perspective, why did we choose to shrink the tiles?
 
+We choose to shrink the tiles because it was the most clear animation to indicate that a match was found, and that those two tiles no longer need to be considered for the rest of the gameplay. 
 
-2. From a technical perspective, how did we implement a _____?
+2. From a technical perspective, how did we implement shrinking the tiles?
+
+    We implemented shrinking the tiles by having an `animatedModels` dictionary that maps a modelID to a boolean value that indicates if a tile's match was found. Tiles are added to this list and their boolean values are changed when the shrinking animation is to be triggered for that tile. However, this animation shouldn't occur as soon as a match is identified because then the tile will not have time to completely flip over. As a result, booleans are used to track when the second tile has finished flipping, which indicates when the shrinking animation should begin.
+
+    To actually shrink the tiles, we loop through the animatedModels for the true values and adjust the current scale of the model by using the formula: `curScale[m] = curScale[m] - speed * dt` where `m` is the `modelID` and `speed` is 1. Once the `curScale` for the model is less than .1, it is simply set to zero and the necessary booleans are reset. 
 
 ### Memory Game Preview
 
@@ -106,5 +111,8 @@ _~2 page report that explains your overall game from both a design and technical
 
 1. How did you manage the complexity of how elements relate to each other while using a scripting language?
 2. If you used GEFS, what code did you need to add on the C++ side to better support your game/scripting?
+
+Mouse code
+
 3. What were the hardest parts of the assignment from a technical perspective?
 4. From a technical implementation perspective, how would you extend your final submission if you had 2-3 more weeks to work on it?
