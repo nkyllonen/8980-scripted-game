@@ -126,11 +126,17 @@ _~2 page report that explains your overall game from both a design and technical
 ### Using GEFS to build the game
 
 1. How did you manage the complexity of how elements relate to each other while using a scripting language?
+
+    We managed the complexity by using many global variables to keep track of the state of the board, particularly which tiles have been flipped and how long they have been flipped.
+
 2. If you used GEFS, what code did you need to add on the C++ side to better support your game/scripting?
 
-Mouse code
+     
 
 3. What were the hardest parts of the assignment from a technical perspective?
+
+    One difficult part of this assignment was coordinating the timing of certain events with other events. For example, the shrinking animation and the flipping animation were implemented separately and were combined later, but at first the shrinking animation was occurring before the flipping animation had finished for the second card. We fixed this by triggering the shrinking animation after the normal 2 second wait time for flipping the cards back over.
+
 4. From a technical implementation perspective, how would you extend your final submission if you had 2-3 more weeks to work on it?
 
-We would likely animate a more interesting end game sequence.
+    We would likely add a more interesting and functional end screen. Ideally, a pop up would appear prompting the user to either play again or to quit. Potentially, we would even add a fun animation to indicate the the game was won like opening a chest filled with gold.
