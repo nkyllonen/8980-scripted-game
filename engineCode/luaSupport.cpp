@@ -80,7 +80,7 @@ std::string getSplashMessageFromLua(lua_State* L) {
 	int argc = lua_gettop(L);
 	lua_getglobal(L, "splashMessage");
 	s = std::string(lua_tostring(L, 1));
-	LOG_F(INFO, "Loaded splash message: '%s'", s.c_str());
+	LOG_F(INFO, "Loaded splash message:\n'%s'", s.c_str());
 	lua_pop(L, 1);
 	return s;
 }
