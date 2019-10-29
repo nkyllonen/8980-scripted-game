@@ -25,29 +25,28 @@ CameraPos = vec3(CameraPosX, CameraPosY, CameraPosZ)
 CameraDir = vec3(CameraDirX, CameraDirY, CameraDirZ)
 CameraUp = vec3(CameraUpX, CameraUpY, CameraUpZ)
 
--- state variables
+-- Game state variables
 boardSize = 4
 flipVelocity = 4.0
-maxFlipTime = 2.0
+maxFlipTime = 1.5
 flippedUpTime = 0.0
 firstFlipped = nil
 secondFlipped = nil
-shrink = false
 match = false
 
--- board state variables
+-- Board state variables
 spacingY = 1.1 --Give a small space between grid cells to create boundries
 startingY = -.6
 startingZ = -1.8
 spacingZ = 1.2
 
--- arrays containing world objects
+-- Arrays containing world objects
 tiles = {} -- array mapping index --> modelID
 tileItems = {} -- array mapping index --> item string
 items = {"Tower", "Crystal", "Pug", "Sheep", "Ship", "Poplar", "Bottle", "Carrot"}
 modelIndices = {} -- array mapping modelID --> index
 
--- array containing amount each tile has rotated in radians
+-- Array containing amount each tile has rotated in radians
 flipped = {}
 
 --Tile variables
@@ -58,11 +57,9 @@ colliders = {}
 
 --Variables used for shrinking
 animatedModels = {}
-speed = 1
+shrinkSpeed = 1
 
 function frameUpdate(dt)
-
-  
   -- update flippedUpTime
   if flippedUpTime > 0 then
     flippedUpTime = flippedUpTime + dt
@@ -71,30 +68,19 @@ function frameUpdate(dt)
   -- check for match
   if firstFlipped and secondFlipped then
     if tileItems[firstFlipped] == tileItems[secondFlipped] then
-      print("MATCH!!")
       animatedModels[tiles[firstFlipped]] = true
       animatedModels[tiles[secondFlipped]] = true
       match = true
-    end
-      
-    --print("What is flipped[firstFlipped]"..flipped[firstFlipped])
-    --print("What is flipped[secondFlipped]"..flipped[secondFlipped])
-  
+    end  
   end
 
+  -- time is up
   if flippedUpTime > maxFlipTime then
-    -- time is up
-    -- print("time is up!")
     flippedUpTime = 0.0
-    if match then
-      shrink = true
-    
-    else
-      -- reset
-      flipDown(firstFlipped)
-      flipDown(secondFlipped)
-      
-    end
+
+    -- reset flipped tiles
+    flipDown(firstFlipped)
+    flipDown(secondFlipped)
     firstFlipped = nil
     secondFlipped = nil
   else
@@ -108,15 +94,17 @@ function frameUpdate(dt)
         -- negative means flipping down
         rotateModel(tiles[idx], -1.0*flipVelocity*dt, 0 , 1, 0)
         flipped[idx] = flipped[idx] - flipVelocity*dt
+      else
+        -- print("flipped val: "..val)
       end
     end
   end
   
-  if shrink then
-    print("Calling shrinking")
+  -- check if we need to start shrinking
+  -- if match and (flippedUpTime == 0.0) then
+  if match and secondFlipped and (flipped[secondFlipped] > 3.14) then
     shrinking(dt)
   end
-
 end
 
 function shrinking(dt)
@@ -130,8 +118,8 @@ function shrinking(dt)
     --print("What is flipped[modelIndices[m]]"..flipped[modelIndices[m]])
     if animatedModels[m] then
       --print("What is curScale[m]"..curScale[m])
-      curScale[m] = curScale[m] - speed*dt
-      print(m,_,curScale[m])
+      curScale[m] = curScale[m] - shrinkSpeed*dt
+      -- print(m,_,curScale[m])
       if (curScale[m] < .1) then
         curScale[m] = 0
         animatedModels[m] = false
@@ -161,7 +149,7 @@ function mouseHandler(mouse)
   if (mouse.left and not haveClicked) then
     --See which grid item we clicked on
     hitID, dist = getMouseClickWithLayer(gridLayer)
-    print("hitID: "..hitID)
+    -- print("hitID: "..hitID)
     
 
     -- rotate that tile if it was valid
@@ -200,7 +188,7 @@ end
 
 function flipDown(index)
   -- if flipped up
-  if not (index == nil) and flipped[index] > 0 then
+  if not (index == nil) and (flipped[index] > 0) then
     -- print("flipping down index " .. index)
     flipped[index] = -0.0001
   end
@@ -216,8 +204,11 @@ function initializeBoard()
   for i = 0,3 do
     for j = 0,3 do
       pos = vec3(0, startingY + spacingY*i, startingZ + spacingZ*j)
+
+      -- find prefab that matches the item
       tiles[idx] = addModel(tileItems[idx].."Tile", pos.x, pos.y, pos.z)
       modelIndices[tiles[idx]] = idx
+
       --Grid cell needs a collider for click interaction
       colliders[tiles[idx]] = addCollider(tiles[idx], gridLayer, 0.6, 0, 0, 0)
       curScale[tiles[idx]] = 1
