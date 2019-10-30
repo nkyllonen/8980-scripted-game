@@ -9,6 +9,10 @@ Behind each of the tiles are
 scrambled and waiting for
 you to find!]]
 
+endMessage = [[Great job! You won!
+Click anywhere to play the next level.
+Otherwise, exit by pressing ESC.]]
+
 CameraPosX = -6.0
 CameraPosY = 1.0
 CameraPosZ = 0.0
@@ -33,6 +37,8 @@ flippedUpTime = 0.0
 firstFlipped = nil
 secondFlipped = nil
 match = false
+finished = false
+numMatches = 0
 
 -- Board state variables
 spacingY = 1.1 --Give a small space between grid cells to create boundries
@@ -41,8 +47,8 @@ startingZ = -1.8
 spacingZ = 1.2
 
 -- Arrays containing world objects
-tiles = {} -- array mapping index --> modelID
-tileItems = {} -- array mapping index --> item string
+tiles = {}        -- array mapping index --> modelID
+tileItems = {}    -- array mapping index --> item string
 items = {"Tower", "Crystal", "Pug", "Sheep", "Ship", "Poplar", "Bottle", "Carrot"}
 modelIndices = {} -- array mapping modelID --> index
 
@@ -60,18 +66,28 @@ animatedModels = {}
 shrinkSpeed = 1
 
 function frameUpdate(dt)
+  -- check for winning state
+  if numMatches == #tiles then
+    -- print("YOU WON!")
+    finished = true
+  end
+
   -- update flippedUpTime
   if flippedUpTime > 0 then
     flippedUpTime = flippedUpTime + dt
   end
 
   -- check for match
-  if firstFlipped and secondFlipped then
-    if tileItems[firstFlipped] == tileItems[secondFlipped] then
-      animatedModels[tiles[firstFlipped]] = true
-      animatedModels[tiles[secondFlipped]] = true
-      match = true
-    end  
+  if firstFlipped and secondFlipped and (tileItems[firstFlipped] == tileItems[secondFlipped]) then
+    if match == false then
+      -- increment matches
+      numMatches = numMatches + 2
+      print(numMatches)
+    end
+
+    animatedModels[tiles[firstFlipped]] = true
+    animatedModels[tiles[secondFlipped]] = true
+    match = true
   end
 
   -- time is up
@@ -94,25 +110,18 @@ function frameUpdate(dt)
         -- negative means flipping down
         rotateModel(tiles[idx], -1.0*flipVelocity*dt, 0 , 1, 0)
         flipped[idx] = flipped[idx] - flipVelocity*dt
-      else
-        -- print("flipped val: "..val)
       end
     end
   end
   
   -- check if we need to start shrinking
-  -- if match and (flippedUpTime == 0.0) then
+  -- shrink as soon as second tile has flipped all the way
   if match and secondFlipped and (flipped[secondFlipped] > 3.14) then
     shrinking(dt)
   end
 end
 
 function shrinking(dt)
-
-  --TODO: Could put end condition in here by checking length of animated models
-  
-
-
   --Shrink the tiles if there's a match i.e. when the models are in animated models
   for m,_ in pairs(animatedModels) do
     --print("What is flipped[modelIndices[m]]"..flipped[modelIndices[m]])
@@ -123,7 +132,6 @@ function shrinking(dt)
       if (curScale[m] < .1) then
         curScale[m] = 0
         animatedModels[m] = false
-        shrink = false
         match = false
       end
 
@@ -138,16 +146,24 @@ end
 
 function keyHandler(keys)
   -- if keys.up then
-  --   -- flip up random tile
-  --   r = math.random(#tileItems)
-  --   flipUp(r)
   -- end
 end
 
 -- Mouse handler
 function mouseHandler(mouse)
   if (mouse.left and not haveClicked) then
-    --See which grid item we clicked on
+    -- restart the game if we're done
+    if finished then
+      -- update to next level values
+      flipVelocity = flipVelocity + 0.2
+      maxFlipTime = maxFlipTime - 0.1
+
+      -- reset board
+      initializeBoard()
+      return
+    end
+
+    -- See which grid item we clicked on
     hitID, dist = getMouseClickWithLayer(gridLayer)
 
     -- rotate that tile if it was valid
@@ -198,6 +214,23 @@ function flipDown(index)
 end
 
 function initializeBoard()
+  -- make sure everything is empty
+  tiles = {}
+  modelIndices = {}
+  curPos = {}
+  curScale = {}
+  colliders = {}
+  animatedModels = {}
+
+  -- reset all out state variables
+  finished = false
+  firstFlipped = nil
+  secondFlipped = nil
+  match = false
+  finished = false
+  numMatches = 0
+  
+
   -- randomize order of tileItems
   shuffle(tileItems)
 
