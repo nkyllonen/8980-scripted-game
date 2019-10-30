@@ -15,8 +15,8 @@ void luaSetup(lua_State * L){
 	lua_register(L, "findModel", findModel);
 	lua_register(L, "hideModel", hideModel);
 	lua_register(L, "unhideModel", unhideModel);
-	lua_register(L, "selectChild", selectChild);
-	lua_register(L, "getChild", getChild);
+	// lua_register(L, "selectChild", selectChild);
+	// lua_register(L, "getChild", getChild);
 	lua_register(L, "deleteModel", deleteModel);
 	lua_register(L, "addCollider", addCollider);
 	lua_register(L, "getCollisionsWithLayer", getCollisionsWithLayer);
@@ -76,15 +76,35 @@ glm::vec3 getCameraUpFromLua(lua_State * L){
 	return cameraUp;
 }
 
-//--------------- Splash Screen --------------------
+//-------------- Screen Messages -------------------
 std::string getSplashMessageFromLua(lua_State* L) {
 	std::string s;
 	int argc = lua_gettop(L);
 	lua_getglobal(L, "splashMessage");
 	s = std::string(lua_tostring(L, 1));
-	LOG_F(INFO, "Loaded splash message:\n'%s'", s.c_str());
+	// LOG_F(INFO, "Loaded splash message:\n'%s'", s.c_str());
 	lua_pop(L, 1);
 	return s;
+}
+
+std::string getEndMessageFromLua(lua_State* L) {
+	std::string s;
+	int argc = lua_gettop(L);
+	lua_getglobal(L, "endMessage");
+	s = std::string(lua_tostring(L, 1));
+	// LOG_F(INFO, "Loaded end message:\n'%s'", s.c_str());
+	lua_pop(L, 1);
+	return s;
+}
+
+bool getFinishedState(lua_State* L) {
+	bool b;
+	int argc = lua_gettop(L);
+	lua_getglobal(L, "finished");
+	b = lua_toboolean(L, 1);
+	// if (b) LOG_F(INFO, "Loaded finished state boolean: TRUE");
+	lua_pop(L, 1);
+	return b;
 }
 
 //------------------- Audio ------------------------
@@ -323,39 +343,39 @@ int findModel(lua_State * L){
 	return 1;
 }
 
-int getChild(lua_State * L){
-	int parentModelID, childNumber, childModelID;
-	string childName;
-	int argc = lua_gettop(L);
-	parentModelID = (int)lua_tonumber(L, 1);
-	childNumber = (int)lua_tonumber(L, 2);
-	LOG_F(INFO,"Finding Child: %d of %d children",childNumber,(int)models[parentModelID].childModel[0]->childModel.size());
-	childName = models[parentModelID].childModel[0]->childModel[childNumber]->name;
-	for (int i = 0; i < numModels; i++){
-		if (models[i].name == childName){
-			childModelID = i;
-			continue;
-		} 
-	}
-	LOG_F(INFO,"Node %s child #%d is %s",models[parentModelID].name.c_str(), childNumber, models[childModelID].name.c_str());
+// int getChild(lua_State * L){
+// 	int parentModelID, childNumber, childModelID;
+// 	string childName;
+// 	int argc = lua_gettop(L);
+// 	parentModelID = (int)lua_tonumber(L, 1);
+// 	childNumber = (int)lua_tonumber(L, 2);
+// 	LOG_F(INFO,"Finding Child: %d of %d children",childNumber,(int)models[parentModelID].childModel[0]->childModel.size());
+// 	childName = models[parentModelID].childModel[0]->childModel[childNumber]->name;
+// 	for (int i = 0; i < numModels; i++){
+// 		if (models[i].name == childName){
+// 			childModelID = i;
+// 			continue;
+// 		} 
+// 	}
+// 	LOG_F(INFO,"Node %s child #%d is %s",models[parentModelID].name.c_str(), childNumber, models[childModelID].name.c_str());
 
-	return 1;
-}
+// 	return 1;
+// }
 
-int selectChild(lua_State * L){
-	int modelID, layer;
-	float child;
-	int argc = lua_gettop(L);
-	modelID = (int)lua_tonumber(L, 1);
-	child = lua_tonumber(L, 2);
-	if (child >= 0 && child <= 1){ //Interpret child value between 0 and 1 as a precentage through the number of children
-		child *= models[modelID].childModel[0]->numChildren;
-	}
-	models[modelID].childModel[0]->selector = (int)child;
-	LOG_F(1,"Selecting the %d'th from model #%d ",(int)child,modelID);
+// int selectChild(lua_State * L){
+// 	int modelID, layer;
+// 	float child;
+// 	int argc = lua_gettop(L);
+// 	modelID = (int)lua_tonumber(L, 1);
+// 	child = lua_tonumber(L, 2);
+// 	if (child >= 0 && child <= 1){ //Interpret child value between 0 and 1 as a precentage through the number of children
+// 		child *= models[modelID].childModel[0]->numChildren;
+// 	}
+// 	models[modelID].childModel[0]->selector = (int)child;
+// 	LOG_F(1,"Selecting the %d'th from model #%d ",(int)child,modelID);
 
-	return 0;
-}
+// 	return 0;
+// }
 
 int deleteModel(lua_State * L){
 	int modelID;

@@ -49,6 +49,7 @@ bool useShadowMap = true;
 bool drawColliders = false;
 bool showStats = true;
 bool showSplash = false;
+bool gameFinished = false;
 
 int targetFrameRate = 30;
 float secondsPerFrame = 1.0f / (float)targetFrameRate;
@@ -58,6 +59,7 @@ bool useDebugCamera = false;
 vec3 defaultDebugPos = vec3(10,10,10);
 
 string splashMessage = "";
+string endMessage = "";
 
 int targetScreenWidth = 1120;
 int targetScreenHeight = 700;
@@ -159,10 +161,10 @@ int main(int argc, char *argv[]) {
 
 	LOG_F(INFO, "Script Loaded without Error.");
 
-	// load in splash screen message if we want one
+	// load in screen messages if we want one
 	if (showSplash) {
 		splashMessage = getSplashMessageFromLua(L);
-		// LOG_F(INFO, "Loading in splash screen message: '%s'", splashMessage.c_str());
+		endMessage = getEndMessageFromLua(L);
 	}
 
 	int timeSpeed = 1; //Modifies timestep rate given to Lua
@@ -244,6 +246,9 @@ int main(int argc, char *argv[]) {
 		//Read gamepad/controller and send the state to the lua script
 		updateControllerState();
 		gamepadUpdateLua(L);
+
+		// check if game is finished
+		gameFinished = getFinishedState(L);
 
 		lua_getglobal(L, "frameUpdate");
 		static long long lastTime_dt = 0;	  //@cleanup -- pull together various timing code
@@ -423,6 +428,47 @@ int main(int argc, char *argv[]) {
 				ImGui::TextColored(ImVec4(1,1,0,1), "%s", title.c_str());
 				ImGui::Separator();
 				string info = splashMessage.substr(firstLine);
+				ImGui::Text("%s", info.c_str());
+			}
+			ImGui::End();
+
+			// // Render ImGui
+			ImGui::Render();
+			ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+		}
+
+		if (gameFinished) {
+			IMGuiNewFrame();
+
+			// inspired by ImGui simple overlay example:
+			// https://github.com/ocornut/imgui/blob/master/imgui_demo.cpp#L4324
+			bool* p_open;
+			bool b = true;
+			p_open = &b;
+			const float DISTANCE = 10.0f; // padding from edge of window
+			int w = 145;
+			int h = 25;
+
+			ImGuiIO& io = ImGui::GetIO();
+			ImVec2 pos = ImVec2(io.DisplaySize.x/2.0 - w, io.DisplaySize.y/2.0 - h);
+			ImVec2 pivot = ImVec2(0.0f, 0.0f);
+			ImGui::SetNextWindowPos(pos, ImGuiCond_Always, pivot);
+			
+			// ImFont* font = io.Fonts->AddFontDefault();
+			// font->FontSize = 20;
+			// io.Fonts->Build();
+
+			static int corner = 0;
+
+			// ImGui::SetNextWindowBgAlpha(0.35f); // Transparent background
+			if (ImGui::Begin("End Screen", p_open, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav))
+			{
+				// ImGui::Text("%s", splashMessage.c_str());
+				int firstLine = endMessage.find("\n");
+				string title = endMessage.substr(0, firstLine);
+				ImGui::TextColored(ImVec4(1,1,0,1), "%s", title.c_str());
+				ImGui::Separator();
+				string info = endMessage.substr(firstLine);
 				ImGui::Text("%s", info.c_str());
 			}
 			ImGui::End();
