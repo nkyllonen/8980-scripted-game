@@ -149,8 +149,6 @@ function mouseHandler(mouse)
   if (mouse.left and not haveClicked) then
     --See which grid item we clicked on
     hitID, dist = getMouseClickWithLayer(gridLayer)
-    -- print("hitID: "..hitID)
-    
 
     -- rotate that tile if it was valid
     if (hitID > -1) then
@@ -167,6 +165,11 @@ end
 function flipUp(index)
   -- disallow flipping a rotating tile or flipping first tile
   if not (flipped[index] == 0) and (firstFlipped == index) then
+    return
+  end
+
+  -- disallow flipping a mini item
+  if animatedModels[tiles[index]] then
     return
   end
 
