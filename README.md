@@ -7,6 +7,7 @@ CSCI 8980 - Real-time Game Engine Design, Assignment 3
 ## Building and Running Instructions
 ```
 # build Makefile using cmake (need to do this for every additional C++ files added)
+$ cd build
 $ cmake ..
 
 # build engine
@@ -40,8 +41,8 @@ $ ./engine <folder containing main.lua> Debug
 
 ## Controls
 - Arrow keys are scene dependent
-    - If running SimpleExample/, these translate the trex model along the tiled floor.
-    - If running a scene with the dynamic camera, such as Problem1/ or DebugCamera/ or FrustumCulling/, these rotate and translate the camera. See example video 1c for more information.
+    - If running `SimpleExample/`, these translate the trex model along the tiled floor.
+    - If running a scene with the dynamic camera, such as `Problem1/` or `DebugCamera/` or `FrustumCulling/`, these rotate and translate the camera.
 - R-key
     - Resets the scene by reloading the materials, models, and scene files. These do not include any changes made that require recompilation.
     - Note that this feature does not always work.
