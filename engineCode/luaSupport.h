@@ -24,8 +24,6 @@ int unpauseSound(lua_State * L); //pause all sounds
 
 int addModel(lua_State * L); //Adds model to be drawn
 int findModel(lua_State * L); //Find model ID based on name
-// int selectChild(lua_State * L);
-// int getChild(lua_State * L); //Find a child model (pre-fab) with a given name
 
 int deleteModel(lua_State * L); //Stop drawing model (will auto continue if you draw a model of the same type)
 int hideModel(lua_State * L); //Stop drawing model

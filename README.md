@@ -1,4 +1,4 @@
-# 8980-scripted-game
+# 8980-scripted-game [Memory Tiles]
 CSCI 8980 - Real-time Game Engine Design, Assignment 3
 - Nikki Kyllonen, [nkyllonen](https://github.com/nkyllonen)
 
@@ -7,6 +7,7 @@ CSCI 8980 - Real-time Game Engine Design, Assignment 3
 ## Building and Running Instructions
 ```
 # build Makefile using cmake (need to do this for every additional C++ files added)
+$ cd build
 $ cmake ..
 
 # build engine
@@ -40,8 +41,8 @@ $ ./engine <folder containing main.lua> Debug
 
 ## Controls
 - Arrow keys are scene dependent
-    - If running SimpleExample/, these translate the trex model along the tiled floor.
-    - If running a scene with the dynamic camera, such as Problem1/ or DebugCamera/ or FrustumCulling/, these rotate and translate the camera. See example video 1c for more information.
+    - If running `SimpleExample/`, these translate the trex model along the tiled floor.
+    - If running a scene with the dynamic camera, such as `Problem1/` or `DebugCamera/` or `FrustumCulling/`, these rotate and translate the camera.
 - R-key
     - Resets the scene by reloading the materials, models, and scene files. These do not include any changes made that require recompilation.
     - Note that this feature does not always work.
@@ -55,6 +56,18 @@ $ ./engine <folder containing main.lua> Debug
 
 ## Project Report
 
+### Final Submission Video
+
+[![gameplay sped up 2x](images/gameplay2x.gif)](https://drive.google.com/file/d/17fKi_CLu9FM_aSlv4TGW93ss_OIPm4TW/view?usp=sharing)
+
+_This is a 2x sped up gif showing off our full Memory Tiles game. Click gif to go to a 1.5x sped up Google Drive video of our gameplay._
+
+Run **Memory Tiles** as such, with the `Game` configuration setting:
+
+```
+$ ./engine MemoryGame/ Game
+```
+
 ### Animation Highlights
 
 _show a targeted video highlighting the use of animation. Explain why you chose these specific animation aspects for your puzzle/game (from a design perspective) and describe how you achieved these animation effects (from a technical perspective)_
@@ -62,6 +75,8 @@ _show a targeted video highlighting the use of animation. Explain why you chose 
 #### Rotating tiles by clicking
 
 [![rotation on tile click](images/rotate-on-click2.gif)](https://drive.google.com/file/d/1VmDnugBzUmzohaOUJID3_5jrK3Es1-q2/view?usp=sharing)
+
+_Click gif to go to the video._
 
 1. From a design perspective, why did we choose a click-based rotation?
 
@@ -83,9 +98,11 @@ _show a targeted video highlighting the use of animation. Explain why you chose 
     
     With this model id, if it is a valid time to rotate a tile (no tiles are flipped or only one other tile is flipped), then that model's radian value within `flipped` is set to a very small positive number. This small positive number will, in essence, notify `frameUpdate` that this tile is now in the process of flipping up.
 
-#### Shrinking the tiles until they disappear
+#### Shrinking tiles until they disappear
 
-<!-- [![some gif here...](images/...)](google drive link...) -->
+[![shrinking on matching tiles](images/shrinking.gif)](https://drive.google.com/file/d/1OnfmpzHiM6GESt7ls3Zp2nKCq0qhf8gj/view?usp=sharing)
+
+_Click gif to go to the video._
 
 1. From a design perspective, why did we choose to shrink the tiles?
 
@@ -107,7 +124,7 @@ _~2 page report that explains your overall game from both a design and technical
 
 2. What is the win condition?
 
-    The win condition is met when all the tiles have been matched, and therefore when all tiles have disappeared from the screen. 
+    The win condition is met when all the tiles have been matched. When this happens, a dialog box will appear showing our ending message. More discussion on this is below in the **End Screen** section at the bottom. 
 
 3. How faithful is your implementation to physical/commercial versions of the game?
 
@@ -135,8 +152,48 @@ _~2 page report that explains your overall game from both a design and technical
      
 3. What were the hardest parts of the assignment from a technical perspective?
 
-    One difficult part of this assignment was coordinating the timing of certain events with other events. For example, the shrinking animation and the flipping animation were implemented separately and were combined later, but at first the shrinking animation was occurring before the flipping animation had finished for the second card. We fixed this by triggering the shrinking animation after the normal 2 second wait time for flipping the cards back over.
+    One difficult part of this assignment was coordinating the timing of certain events with other events. For example, the shrinking animation and the flipping animation were implemented separately and were combined later, but at first the shrinking animation was occurring before the flipping animation had finished for the second card. We fixed this by triggering the shrinking animation after the second card finished flipping up.
+
+    Another difficult part was showing dialog boxes. Since the boxes are created and displayed by the engine itself, the Lua script needed to somehow tell the engine what it wanted to show. The work around we used requires the game to be run with a new configuration, `Game`, which defined some globals in `main`. It also required the user to include, in their script, two global strings: `splashMessage` and `endMessage` and a `finished` boolean. For this assignment, we set these in `main.lua` as such:
+
+    ```
+    splashMessage = [[Welcome to Memory Tiles!
+    Behind each of the tiles are
+    8 pairs of items, randomly
+    scrambled and waiting for
+    you to find!]]
+
+    endMessage = [[**Great job! You won!**
+    Right click anywhere to play the next level.
+    Otherwise, exit by pressing ESC.]]
+    ```
+
+    In order for the engine to know whether or not it should be showing the `endMessage`, it must poll. Each frame, or pass through the game loop, `main` updates its `gameFinished` value according to whatever `finished` may be. When the game does finish, that flag is set in the engine and the engine knows to display the dialog box containing the `endMessage` above. Both the `splashMessage` and the `endMessage` both are loaded in only once, before the game loop begins, assuming neither message will be changed by the script.
 
 4. From a technical implementation perspective, how would you extend your final submission if you had 2-3 more weeks to work on it?
 
-    We would likely add a more interesting and functional end screen. Ideally, a pop up would appear prompting the user to either play again or to quit. Potentially, we would even add a fun animation to indicate the the game was won like opening a chest filled with gold.
+    We would likely add a more interesting and fun animations. One idea would be to include at the end an animation to indicate the the game was won like opening a chest filled with gold. Another idea would be to add shuffling animations when a new game is begun, possibly similar to a solitaire or other card game.
+
+    We could also extend the board to have more tiles; either upon the user's request or as the user levelled up. The levelling up is very rudimentary at the moment with the levels increasing in difficulty by simply making tiles flip faster and display for less time, as shown below. Currently, there is not bounds to this if the user continued to play and level up.
+
+    ```
+      -- update to next level values
+      flipVelocity = flipVelocity + 0.2
+      maxFlipTime = maxFlipTime - 0.1
+    ```
+
+### End Screen
+
+[![endscreen and new level](images/endscreen.gif)](https://drive.google.com/file/d/120_JXhNMuHhM6zCwQsEiZxQGTvhdyyMt/view?usp=sharing)
+
+_Click gif to go to the video._
+
+Although it is difficult to see in the smaller gif, when the user wins and completes a level, there is a dialog box that pops up and congratulates the user with the following message:
+
+```
+**Great job! You won!**
+Right click anywhere to play the next level.
+Otherwise, exit by pressing ESC.
+```
+
+The debug camera is shown being used at the end of this clip to show that the board has been reset and the tiles have been shuffled and placed. Refer to the **Controls** section above for more information on how to enter and exit from the debug camera.
