@@ -15,6 +15,8 @@ void luaSetup(lua_State * L){
 	lua_register(L, "findModel", findModel);
 	lua_register(L, "hideModel", hideModel);
 	lua_register(L, "unhideModel", unhideModel);
+	lua_register(L, "selectChild", selectChild);
+	lua_register(L, "getChild", getChild);
 	lua_register(L, "deleteModel", deleteModel);
 	lua_register(L, "addCollider", addCollider);
 	lua_register(L, "getCollisionsWithLayer", getCollisionsWithLayer);
@@ -172,7 +174,7 @@ int addModel(lua_State * L){
 			myModelID = (*it)->ID;
 			swap(*it, modelPool.back());
 			modelPool.pop_back();
-			//printf("Found model id %d (%d available) with only child named: %s",myModelID,modelPool.size(),childModelName.c_str());
+			// printf("Found model id %d (%d available) with only child named: %s",myModelID, int(modelPool.size()),childModelName.c_str());
 			//TODO: We should ideally reset his material, etc... (not just transformation)
 			models[myModelID].transform = glm::translate(glm::mat4(), glm::vec3(tx,ty,tz));
 			break;
@@ -219,7 +221,7 @@ int addCollider(lua_State * L){
 
 	int colliderID = addCollider(modelID,layer,r,glm::vec3(tx,ty,tz));
 
-	LOG_F(INFO,"Adding collider %d to model %d in layer %d  (offest %f, %f, %f) with radius %f",colliderID, modelID,layer,tx,ty,tz,r);
+	LOG_F(INFO,"Adding collider %d to model %d in layer %d (offest %f, %f, %f) with radius %.4f",colliderID, modelID,layer,tx,ty,tz,r);
 
 	lua_pushnumber(L, colliderID);
 
@@ -338,6 +340,21 @@ int getChild(lua_State * L){
 	LOG_F(INFO,"Node %s child #%d is %s",models[parentModelID].name.c_str(), childNumber, models[childModelID].name.c_str());
 
 	return 1;
+}
+
+int selectChild(lua_State * L){
+	int modelID, layer;
+	float child;
+	int argc = lua_gettop(L);
+	modelID = (int)lua_tonumber(L, 1);
+	child = lua_tonumber(L, 2);
+	if (child >= 0 && child <= 1){ //Interpret child value between 0 and 1 as a precentage through the number of children
+		child *= models[modelID].childModel[0]->numChildren;
+	}
+	models[modelID].childModel[0]->selector = (int)child;
+	LOG_F(1,"Selecting the %d'th from model #%d ",(int)child,modelID);
+
+	return 0;
 }
 
 int deleteModel(lua_State * L){
