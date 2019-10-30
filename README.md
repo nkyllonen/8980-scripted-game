@@ -107,7 +107,7 @@ _~2 page report that explains your overall game from both a design and technical
 
 2. What is the win condition?
 
-    The win condition is met when all the tiles have been matched, and therefore have disappeared from the screen. 
+    The win condition is met when all the tiles have been matched, and therefore when all tiles have disappeared from the screen. 
 
 3. How faithful is your implementation to physical/commercial versions of the game?
 
@@ -131,8 +131,8 @@ _~2 page report that explains your overall game from both a design and technical
 
 2. If you used GEFS, what code did you need to add on the C++ side to better support your game/scripting?
 
+    We added code to allow the mouse to click on the tiles. This was done by adding a MouseState struct in keyboard.cpp to keep track of the location of the mouse and if it had been clicked. Then the neccessary update methods are called in main.cpp to communicate this information to the `mouseHandler` method in main.lua. In addition, collider methods were added to track when a specific object had been clicked. 
      
-
 3. What were the hardest parts of the assignment from a technical perspective?
 
     One difficult part of this assignment was coordinating the timing of certain events with other events. For example, the shrinking animation and the flipping animation were implemented separately and were combined later, but at first the shrinking animation was occurring before the flipping animation had finished for the second card. We fixed this by triggering the shrinking animation after the normal 2 second wait time for flipping the cards back over.
