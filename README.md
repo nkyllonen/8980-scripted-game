@@ -195,3 +195,5 @@ Although it is difficult to see in the smaller gif, when the user wins and compl
 Right click anywhere to play the next level.
 Otherwise, exit by pressing ESC.
 ```
+
+The debug camera is shown being used at the end of this clip to show that the board has been reset and the tiles have been shuffled and placed. Refer to the **Controls** section above for more information on how to enter and exit from the debug camera.
