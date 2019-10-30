@@ -9,8 +9,8 @@ Behind each of the tiles are
 scrambled and waiting for
 you to find!]]
 
-endMessage = [[Great job! You won!
-Click anywhere to play the next level.
+endMessage = [[**Great job! You won!**
+Right click anywhere to play the next level.
 Otherwise, exit by pressing ESC.]]
 
 CameraPosX = -6.0
@@ -68,7 +68,6 @@ shrinkSpeed = 1
 function frameUpdate(dt)
   -- check for winning state
   if numMatches == #tiles then
-    -- print("YOU WON!")
     finished = true
   end
 
@@ -145,12 +144,28 @@ end
 
 function keyHandler(keys)
   -- if keys.up then
+  --   deleteBoard()
+  --   initializeBoard()
   -- end
 end
 
 -- Mouse handler
 function mouseHandler(mouse)
   if (mouse.left and not haveClicked) then
+    -- TODO: next level with left click...
+    
+    -- See which grid item we clicked on
+    hitID, dist = getMouseClickWithLayer(gridLayer)
+
+    -- rotate that tile if it was valid
+    if (hitID > -1 and not finished) then
+      flipUp(modelIndices[hitID])
+    end
+
+    haveClicked = true
+  end
+  -- right clicks
+  if (mouse.right and not haveClicked) then
     -- restart the game if we're done
     if finished then
       -- update to next level values
@@ -158,20 +173,13 @@ function mouseHandler(mouse)
       maxFlipTime = maxFlipTime - 0.1
 
       -- reset board
+      deleteBoard()
       initializeBoard()
-      return
     end
 
-    -- See which grid item we clicked on
-    hitID, dist = getMouseClickWithLayer(gridLayer)
-
-    -- rotate that tile if it was valid
-    if (hitID > -1) then
-      flipUp(modelIndices[hitID])
-    end
-
-    haveClicked = true
+    haveClicked = true;
   end
+
   if (not mouse.left) then
     haveClicked = false
   end
@@ -221,13 +229,17 @@ function initializeBoard()
   colliders = {}
   animatedModels = {}
 
-  -- reset all out state variables
+  idx = 1
+  for i = 1, boardSize*boardSize do
+    flipped[idx] = 0
+  end
+
+  -- reset all our state variables
   firstFlipped = nil
   secondFlipped = nil
   match = false
   finished = false
   numMatches = 0
-  
 
   -- randomize order of tileItems
   shuffle(tileItems)
@@ -262,14 +274,21 @@ function shuffle(tbl)
   return tbl
 end
 
+-- actually delete all of the tiles
+function deleteBoard()
+  for i,mid in pairs(tiles) do
+    deleteModel(mid);
+  end
+end
+
 -- fill tileItems, 2 at a time
 idx = 1
 for i = 1, boardSize*boardSize, 2 do
   tileItems[i] = items[idx]
-  flipped[i] = 0
+  -- flipped[i] = 0
 
   tileItems[i+1] = items[idx]
-  flipped[i+1] = 0
+  -- flipped[i+1] = 0
   idx = idx + 1
 end
 
