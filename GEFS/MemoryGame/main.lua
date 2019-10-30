@@ -82,7 +82,6 @@ function frameUpdate(dt)
     if match == false then
       -- increment matches
       numMatches = numMatches + 2
-      print(numMatches)
     end
 
     animatedModels[tiles[firstFlipped]] = true
@@ -223,7 +222,6 @@ function initializeBoard()
   animatedModels = {}
 
   -- reset all out state variables
-  finished = false
   firstFlipped = nil
   secondFlipped = nil
   match = false
